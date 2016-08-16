@@ -19,6 +19,10 @@ import com.mygdx.game.startscreen.StartScreen.Mode;
  */
 public class GameboardScreen extends ScreenAdapter {
 
+	public enum PlayerId {
+		PLAYER1, PLAYER2;
+	}
+	
 	private Main game;
 
 	private Mode mode;

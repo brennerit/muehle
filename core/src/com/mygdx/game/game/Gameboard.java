@@ -19,6 +19,7 @@ public class Gameboard {
 
 	private Texture gamefield;
 
+	Rule rule;
 	public Gameboard() {
 
 		this.field = new GameboardPoint[FIELD_LENGHT * FIELD_LENGHT];
@@ -27,6 +28,8 @@ public class Gameboard {
 
 		this.initField();
 
+		this.rule = new Rule();
+				
 		this.printField();
 	}
 

@@ -1,6 +1,7 @@
 package com.mygdx.game.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -24,9 +25,10 @@ public class GameboardPoint {
 
 	StoneSide side;
 	
-	Texture tex;
+	Sprite tex;
 	
 	public GameboardPoint( StoneSide s){
+		
 		
 		this.setSide(s);
 	}
@@ -38,6 +40,7 @@ public class GameboardPoint {
 		return side;
 	}
 	public void dispose(){
-		this.tex.dispose();
+		this.tex.getTexture().dispose();
+		
 	}
 }
