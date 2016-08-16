@@ -13,19 +13,24 @@ import com.mygdx.game.icons.Cursor;
 
 public class StartScreen extends ScreenAdapter {
 
-	public enum Select {
-		VS_PLAYER, VS_CPU, OPTION, END;
+	public enum Mode {
+		VS_PLAYER, VS_CPU, END;
 	}
 
 	private Main game;
 
-	private Select select;
+	private Mode mode;
 
-	private int selectNumber;
+	private int menuPointNumber;
 
 	private Cursor cursor;
 
 	private Texture title;
+
+	private int maxChoice = 3;
+
+	private final int posYofMenuPoint;
+	private final int posXofMenuPoint;
 
 	public StartScreen(Main game) {
 		this.game = game;
@@ -34,88 +39,115 @@ public class StartScreen extends ScreenAdapter {
 
 		this.cursor = new Cursor(Main.WINDOW_WIDTH / 2 - 150, Main.WINDOW_HEIGHT / 2);
 
-		this.select = Select.VS_CPU;
+		this.posYofMenuPoint = Main.WINDOW_HEIGHT / 2;
+		this.posXofMenuPoint = Main.WINDOW_WIDTH / 2 - 50;
+
+		this.mode = Mode.VS_CPU;
 	}
 
+	/**
+	 * Hier wird das Menü gezeichnet. Wichtig: Diese Methode muss innerhalb von
+	 * batch.begin() und batch.end() ausgeführt werden
+	 */
 	private void drawMenu() {
-
-		int poxY = Main.WINDOW_HEIGHT / 2;
+		
 		this.game.getBatch().draw(this.title, 0, 0);
 
-		this.game.getFont().draw(game.getBatch(), "Player vs CPU", Main.WINDOW_WIDTH / 2 - 50, Main.WINDOW_HEIGHT / 2);
-		this.game.getFont().draw(game.getBatch(), "Player vs Player", Main.WINDOW_WIDTH / 2 - 50,
-				Main.WINDOW_HEIGHT / 2 - 50);
-		this.game.getFont().draw(game.getBatch(), "Spiel Beenden", Main.WINDOW_WIDTH / 2 - 50,
-				Main.WINDOW_HEIGHT / 2 - 100);
+		this.game.getFont().draw(game.getBatch(), "Player vs CPU", this.posXofMenuPoint, this.posYofMenuPoint);
+
+		this.game.getFont().draw(game.getBatch(), "Player vs Player", this.posXofMenuPoint, this.posYofMenuPoint - 50);
+
+		this.game.getFont().draw(game.getBatch(), "Spiel Beenden", this.posXofMenuPoint, this.posYofMenuPoint - 100);
 
 		this.game.getBatch().draw(this.cursor.getTex(), this.cursor.getPosX(), this.cursor.getPosY());
 	}
 
-	private int maxChoice = 3;
-
+	/**
+	 * Der Spieler kann entweder ENTER drücken, um einen Punkt auszuwählen oder
+	 * aber mit den Pfeiltasten oben und unten den Cursor bewegen. Die Stelle
+	 * des Cursors wird anhand der Variable menuPointNumber festgelegt. Damit
+	 * weiß die Klasse an welcher stelle im menü sich der Cursor befindet.
+	 */
 	private void InputHandler() {
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
 			this.executeEnter();
 
 		} else {
-
 			if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
-				this.selectNumber++;
+				this.menuPointNumber++;
 			}
 			if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-				this.selectNumber--;
+				this.menuPointNumber--;
+			}
+			if (menuPointNumber >= maxChoice) {
+				this.menuPointNumber = 0;
+			}
+			if (menuPointNumber < 0) {
+				this.menuPointNumber = maxChoice - 1;
 			}
 
-			if (selectNumber >= maxChoice)
-				this.selectNumber = 0;
-			if (selectNumber < 0)
-				this.selectNumber = maxChoice - 1;
-
-			this.readSelectorByNumber();
+			this.readCursorPosition();
+			this.readMode();
 		}
 	}
 
-	private void readSelectorByNumber() {
-		switch (selectNumber) {
+	/**
+	 * Hier wird die Position des Cursors Aktualisiert.
+	 */
+	private void readCursorPosition() {
+
+		int posYCursor = this.posYofMenuPoint - 20;
+		
+		int posXCursor = this.posXofMenuPoint - 50;
+		
+		switch (this.menuPointNumber) {
 		case 0:
-			this.select = this.select.VS_CPU;
-			this.cursor.setPos(Main.WINDOW_WIDTH / 2 - 100, Main.WINDOW_HEIGHT / 2 - 20);
+			this.cursor.setPos(posXCursor, posYCursor);
 			break;
 		case 1:
-			this.select = this.select.VS_PLAYER;
-			this.cursor.setPos(Main.WINDOW_WIDTH / 2 - 100, Main.WINDOW_HEIGHT / 2 - 70);
+			this.cursor.setPos(posXCursor, posYCursor - 50);
 			break;
 		case 2:
-			this.select = this.select.END;
-			this.cursor.setPos(Main.WINDOW_WIDTH / 2 - 100, Main.WINDOW_HEIGHT / 2 - 170);
+			this.cursor.setPos(posXCursor, posYCursor - 100);
 			break;
-		default:
-			;
 		}
 	}
 
+	/**
+	 * Hier wird der modus anhand des MenuPointNumber angepasst.
+	 */
+	private void readMode() {
+		switch (this.menuPointNumber) {
+		case 0:
+			this.mode = Mode.VS_CPU;
+			break;
+		case 1:
+			this.mode = Mode.VS_PLAYER;
+			break;
+		case 2:
+			this.mode = Mode.END;
+			break;
+		}
+	}
+
+	/**
+	 * Falls der Spieler ENTER drückt, wird diese Methode aufgerufen.
+	 */
 	private void executeEnter() {
-
-		switch (this.select) {
+		switch (this.mode) {
 		case VS_CPU:
-			this.game.setScreen(new GameboardScreen(game));
-
+			this.game.setScreen(new GameboardScreen(this.game, Mode.VS_CPU));
 			break;
 		case VS_PLAYER:
-			this.game.setScreen(new GameboardScreen(game));
+			this.game.setScreen(new GameboardScreen(this.game, Mode.VS_PLAYER));
 			break;
 		case END:
-			super.dispose();
 			this.dispose();
 			this.game.dispose();
-
-			System.exit(0);
+			Gdx.app.exit();
 			break;
-		default:
-
 		}
-		this.game.setMode(this.select);
 		this.dispose();
 	}
 

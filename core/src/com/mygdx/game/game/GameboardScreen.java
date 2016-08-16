@@ -8,125 +8,53 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.mygdx.game.Main;
-import com.mygdx.game.game.gameStone.StoneSide;
+import com.mygdx.game.game.GameboardPoint.StoneSide;
 import com.mygdx.game.startscreen.StartScreen;
-import com.mygdx.game.startscreen.StartScreen.Select;
+import com.mygdx.game.startscreen.StartScreen.Mode;
 
 /**
- * Diese Klasse Repr‰sentiert das Spielfeld. Das Spielfeld besteht aus
- * Spielsteine und ist 9 * 9 groﬂ Dabei sind die viele Felder NULL, da sie nicht
- * gebraucht werden.
- * 
+ * Diese Klasse repr‰sentiert das eigentliche Spiel. Sie enth‰lt das eigentliche Spielfeld und den modus.
  * @author Ahmed
  *
  */
 public class GameboardScreen extends ScreenAdapter {
 
-	private gameStone[] field;
-
-	private final int FIELD_LENGHT = 7;
-
 	private Main game;
 
-	private Texture gamefield;
+	private Mode mode;
 
-	public GameboardScreen(Main game) {
+	private Gameboard gameboard;
+	
+	public GameboardScreen(Main game, Mode mode) {
 		this.game = game;
 
-		this.field = new gameStone[FIELD_LENGHT * FIELD_LENGHT];
-
-		this.gamefield = new Texture("muehle_board.png");
-
-		this.initField();
-
-		this.printField();
+		this.setMode(mode);
+		
+		this.gameboard = new Gameboard();
+		
 	}
 
-	/**
-	 * Diese Methode Initialisiert das Spielfeld von innen nach auﬂen.
-	 * 
-	 */
-	private void initField() {
-		int decency = 1;
-		int posX = 2;
-		int posY = 2;
-
-		for (int loop = 0; loop < 3; loop++) {
-			for (int height = 0; height < 3; height++) {
-				for (int width = 0; width < 3; width++) {
-
-					setFieldElement(posX, posY);
-
-					posX += decency;
-				}
-
-				posX -= (decency * 3);
-
-				posY += decency;
-			}
-
-			posX -= 1;
-
-			posY = posY - (decency * 3) - 1;
-
-			decency++;
-		}
-		this.getFieldElement(3, 3).setSide(StoneSide.MIDDLE);
-
+	public void setMode(Mode mode) {
+		this.mode = mode;
 	}
 
-	private void setFieldElement(int x, int y) {
-		this.field[(y * this.FIELD_LENGHT) + x] = new gameStone(gameStone.StoneSide.WITHOUT_STONE);
-	}
-
-	private gameStone getFieldElement(int x, int y) {
-
-		return this.field[x + y * this.FIELD_LENGHT];
-	}
-
-	private void printField() {
-
-		for (int height = 0; height < FIELD_LENGHT; height++) {
-			for (int width = 0; width < FIELD_LENGHT; width++) {
-				gameStone stein = this.getFieldElement(width, height);
-				if (stein == null) {
-					System.out.print("O ");
-				} else if (stein.getSide() == gameStone.StoneSide.PLAYER1) {
-					System.out.print("1 ");
-				} else if (stein.getSide() == gameStone.StoneSide.PLAYER2) {
-					System.out.print("2 ");
-				} else if (stein.getSide() == gameStone.StoneSide.WITHOUT_STONE) {
-					System.out.print("X ");
-				} else {
-					System.out.print("H ");
-				}
-
-			}
-			System.out.println();
-		}
-
-	}
-
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
+	public Mode getMode() {
+		return this.mode;
 	}
 
 	public void InputHandler() {
-
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			this.game.setScreen(new StartScreen(game));
 		}
 	}
 
+	/**
+	 * Diese Methode schreibt die ‹berschrift, um welchen modus es sich handelt.
+	 */
 	private void printHeadline() {
-
-		String title = (this.game.getMode() == Select.VS_PLAYER)?"Player Vs Player":"Player vs CPU";
+		String title = (this.getMode() == Mode.VS_PLAYER)?"Player Vs Player":"Player vs CPU";
 		this.game.getFont().draw(this.game.getBatch(),title , Main.WINDOW_WIDTH/2 - 50, Main.WINDOW_HEIGHT - 50);
 	}
-
-	
 
 	@Override
 	public void render(float delta) {
@@ -134,20 +62,19 @@ public class GameboardScreen extends ScreenAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		InputHandler();
-
-		game.getBatch().begin();
-		game.getBatch().draw(gamefield, (Main.WINDOW_WIDTH / 2) - (this.gamefield.getWidth() / 2), 0, 400, 400);
+		
+		this.game.getBatch().begin();
+		
+		this.game.getBatch().draw(this.gameboard.getGamefield(), (Main.WINDOW_WIDTH / 2) - (this.gameboard.getGamefield().getWidth() / 2), 0, 400, 400);
 
 		this.printHeadline();
-		game.getBatch().end();
+		
+		this.game.getBatch().end();
 	}
 
 	@Override
 	public void dispose() {
-		this.gamefield.dispose();
-		for (int i = 0; i < field.length; i++) {
-			this.field[i].dispose();
-		}
-
+		
+		this.gameboard.dispose();
 	}
 }
