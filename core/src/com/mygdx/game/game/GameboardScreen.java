@@ -66,10 +66,11 @@ public class GameboardScreen extends ScreenAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		InputHandler();
+		this.gameboard.update();
 		
 		this.game.getBatch().begin();
 		
-		this.game.getBatch().draw(this.gameboard.getGamefield(), (Main.WINDOW_WIDTH / 2) - (this.gameboard.getGamefield().getWidth() / 2), 0, 400, 400);
+		this.game.getBatch().draw(this.gameboard.getGamefieldTexture(), (Main.WINDOW_WIDTH / 2) - (this.gameboard.getGamefieldTexture().getWidth() / 2), 0, 400, 400);
 
 		this.printHeadline();
 		
