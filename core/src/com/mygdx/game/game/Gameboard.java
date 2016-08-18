@@ -17,26 +17,48 @@ public class Gameboard {
 
 	private final int FIELD_LENGHT = 7;
 
-	private Texture gamefield;
+	private Texture gamefieldTex;
+	
+	private GameboardPointConnecter connecter;
 
 	Rule rule;
 	public Gameboard() {
 
 		this.field = new GameboardPoint[FIELD_LENGHT * FIELD_LENGHT];
 
-		this.gamefield = new Texture("muehle_board.png");
+		this.gamefieldTex = new Texture("muehle_board.png");
 
 		this.initField();
 
 		this.rule = new Rule();
 				
 		this.printField();
+		
+		this.connecter = new GameboardPointConnecter(0, 0);
 	}
 
-	public Texture getGamefield() {		
-		return this.gamefield;
+	/**
+	 * Mit dieser Methode erh‰lt man die Texture vom Spielfeld
+	 * @return
+	 */
+	public Texture getGamefieldTexture() {		
+		return this.gamefieldTex;
+	}
+	
+	/**
+	 *  Mit dieser Methode erh‰lt man das Spielfeld Array
+	 * @return
+	 */
+	public GameboardPoint[] getGameboard(){
+		return this.field;
 	}
 
+	
+	public void update(){
+		this.connecter.update();
+	
+	}
+	
 	/**
 	 * Diese Methode Initialisiert das Spielfeld Array, bedinnend von innen nach auﬂen.
 	 * 
@@ -116,13 +138,8 @@ public class Gameboard {
 		}
 	}
 
-	public void render(float delta) {
-
-		// TODO
-	}
-
 	public void dispose() {
-		this.gamefield.dispose();
+		this.gamefieldTex.dispose();
 		for (int i = 0; i < field.length; i++) {
 			this.field[i].dispose();
 		}
