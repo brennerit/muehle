@@ -21,7 +21,8 @@ public class Gameboard {
 	
 	private GameboardPointConnecter connecter;
 
-	Rule rule;
+	private Rule rule;
+	
 	public Gameboard() {
 
 		this.field = new GameboardPoint[FIELD_LENGHT * FIELD_LENGHT];
