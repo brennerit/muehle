@@ -40,10 +40,10 @@ public class GameboardPointConnecter {
 	public void update() {
 		if (rect.contains(Gdx.input.getX(), Gdx.input.getY())) {
 			this.tex.setColor(1, 1, 1, 1);
-			System.out.println("DDD");
+			//System.out.println("DDD");
 		} else {
 			this.tex.setColor(0, 0, 0, 0);
-			System.out.println("llllll");
+			//System.out.println("llllll");
 		}	
 
 	}
