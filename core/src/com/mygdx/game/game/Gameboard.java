@@ -46,6 +46,10 @@ public class Gameboard {
 		return this.gamefieldTex;
 	}
 	
+	public Rule getRule(){
+		return this.rule;
+	}
+	
 	/**
 	 *  Mit dieser Methode erhält man das Spielfeld Array
 	 * @return
