@@ -1,5 +1,7 @@
 package com.mygdx.game.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -48,37 +50,23 @@ public class GameboardPoint {
 		
 	}
 
-	public GameboardPoint getNeighbourLeftSide() {
-		return neighbourLeftSide;
+	public List<GameboardPoint> getNeighboursHorizontal() {
+		return neighboursHorizontal;
 	}
 
-	public void setNeighbourLeftSide(GameboardPoint neighbourLeftSide) {
-		this.neighbourLeftSide = neighbourLeftSide;
+	public void setNeighboursHorizontal(List<GameboardPoint> neighboursHorizontal) {
+		this.neighboursHorizontal = neighboursHorizontal;
 	}
 
-	public GameboardPoint getNeighbourRightSide() {
-		return neighbourRightSide;
+	public List<GameboardPoint> getNeighboursVertical() {
+		return neighboursVertical;
 	}
 
-	public void setNeighbourRightSide(GameboardPoint neighbourRightSide) {
-		this.neighbourRightSide = neighbourRightSide;
+	public void setNeighboursVertical(List<GameboardPoint> neighboursVertical) {
+		this.neighboursVertical = neighboursVertical;
 	}
-
-	public GameboardPoint getNeighbourUpSide() {
-		return neighbourUpSide;
-	}
-
-	public void setNeighbourUpSide(GameboardPoint neighbourUpSide) {
-		this.neighbourUpSide = neighbourUpSide;
-	}
-
-	public GameboardPoint getNeighbourDownSide() {
-		return neighbourDownSide;
-	}
-
-	public void setNeighbourDownSide(GameboardPoint neighbourDownSide) {
-		this.neighbourDownSide = neighbourDownSide;
-	}
+	
+	
 
 
 	
