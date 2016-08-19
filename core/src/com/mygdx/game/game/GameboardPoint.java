@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * Diese Klasse repräsentiert die stelle wo der Spielstein platziert werden kann. 
+ * Diese Klasse reprï¿½sentiert die stelle wo der Spielstein platziert werden kann. 
  * Sie kann entweder ein Stein eines Spielers darstellen, oder aber eine stelle, wo kein Stein liegt.
  * Sie kann auch eine Stelle sein, wo kein Spielstein liegt und auch keines liegen darf.
  * @author Ahmed
@@ -14,11 +14,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameboardPoint {
 
 	/**
-	 * PLAYER1 und PLAYER2 sind selbsterklärend.
+	 * PLAYER1 und PLAYER2 sind selbsterklï¿½rend.
 	 * WITHOUT_STONE 	- Hier liegt kein Stein
 	 * MIDDLE 			- Hier liegt kein Stein und darf auch keines! (wichtig)
 	 *
 	 */
+	private GameboardPoint neighbourLeftSide;
+	private GameboardPoint neighbourRightSide;
+	private GameboardPoint neighbourUpSide;
+	private GameboardPoint neighbourDownSide;
+	
+	
 	public enum StoneSide {
 		PLAYER1, PLAYER2, WITHOUT_PLAYER, MIDDLE;
 	}
@@ -43,4 +49,39 @@ public class GameboardPoint {
 		this.tex.getTexture().dispose();
 		
 	}
+
+	public GameboardPoint getNeighbourLeftSide() {
+		return neighbourLeftSide;
+	}
+
+	public void setNeighbourLeftSide(GameboardPoint neighbourLeftSide) {
+		this.neighbourLeftSide = neighbourLeftSide;
+	}
+
+	public GameboardPoint getNeighbourRightSide() {
+		return neighbourRightSide;
+	}
+
+	public void setNeighbourRightSide(GameboardPoint neighbourRightSide) {
+		this.neighbourRightSide = neighbourRightSide;
+	}
+
+	public GameboardPoint getNeighbourUpSide() {
+		return neighbourUpSide;
+	}
+
+	public void setNeighbourUpSide(GameboardPoint neighbourUpSide) {
+		this.neighbourUpSide = neighbourUpSide;
+	}
+
+	public GameboardPoint getNeighbourDownSide() {
+		return neighbourDownSide;
+	}
+
+	public void setNeighbourDownSide(GameboardPoint neighbourDownSide) {
+		this.neighbourDownSide = neighbourDownSide;
+	}
+
+
+	
 }
