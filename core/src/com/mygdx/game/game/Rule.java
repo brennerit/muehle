@@ -78,19 +78,20 @@ public class Rule {
 				newX--;
 			}
 		}
+		isPossible = true;
 		return isPossible;
 	}
 	
 	public boolean moveStoneRightPossible(int x, int y){
-		
+		return true;
 	}
 	
 	public boolean moveStoneUpPossible(int x, int y){
-		
+		return true;
 	}
 	
 	public boolean moveStoneDownPossible(int x, int y){
-		
+		return true;
 	}
 	
 	/**

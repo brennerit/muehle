@@ -19,10 +19,8 @@ public class GameboardPoint {
 	 * MIDDLE 			- Hier liegt kein Stein und darf auch keines! (wichtig)
 	 *
 	 */
-	private GameboardPoint neighbourLeftSide;
-	private GameboardPoint neighbourRightSide;
-	private GameboardPoint neighbourUpSide;
-	private GameboardPoint neighbourDownSide;
+	private List<GameboardPoint> neighboursHorizontal;
+	private List<GameboardPoint> neighboursVertical;
 	
 	
 	public enum StoneSide {
