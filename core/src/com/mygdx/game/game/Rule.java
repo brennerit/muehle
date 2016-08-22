@@ -1,5 +1,7 @@
 package com.mygdx.game.game;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
@@ -13,23 +15,33 @@ import com.mygdx.game.player.Player;
  */
 public class Rule {
 
-	private GameBoardJonbert gameboard;
+	private Gameboard gameboard;
 	private Player currentPlayer;
 	private final int FIELD_LENGHT = 7;
 	private final int MILL = 3;
 	
-	public Rule(){
-		
-	}
-
-	public GameBoardJonbert getGameboard(GameBoardJonbert gameboard, Player player) {
+	public Rule(Gameboard gameboard, Player player){
 		this.gameboard = gameboard;
 		this.currentPlayer = player;
-		return this.gameboard;
 	}
 	
-	
-	
+	public Gameboard getGameboard() {
+		return gameboard;
+	}
+
+	public void setGameboard(Gameboard gameboard) {
+		this.gameboard = gameboard;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+
 	/**
 	 * Prueft ob es moeglich ist einen Stein an diesem Punkt des Spielfeldes zu setzen.
 	 * @return true wenn der Stein gesetzt werden kann.
@@ -46,18 +58,43 @@ public class Rule {
 	}
 	
 	/**
-	 * Prüfen ob eine Mühle vorhanden ist und die Nummer der Steine zurückgeben, die sich darin befinden.
+	 * Sucht die Punkte, die sich in diesem Moment in einer Muehle befinden.
+	 * @param point Ausgangspunkt von dem gesucht wird.
+	 * @return {@link List} die die {@link GameBoardPoint}s enthaelt.
 	 */
+	public List<GameBoardPoint> isMillLower(GameBoardPoint point){
+		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
+		if( point.getNumber() % 2 == 0){
+			gameBoardPointList.addAll(searchLowerHigher(point));
+			gameBoardPointList.addAll(searchInnerOuter(point));
+		}else{
+			
+		}
+		return gameBoardPointList;
+	}
+	
+	private List<GameBoardPoint> searchInnerOuter(GameBoardPoint point){
+		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
+		
+		return gameBoardPointList;
+	}
 	
 	/**
-	 * Prfueft von einem Punkt ausgehend, ob die Nachbarn
+	 * 
 	 * @param point
 	 * @return
 	 */
-	public List<GameBoardPoint> isMillLower(GameBoardPoint point){
-		boolean millLower;
-		
-		return null;
+	private List<GameBoardPoint> searchLowerHigher(GameBoardPoint point){
+		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
+		if(pointsHaveSamePlayer(point.getLower(),point.getLower())){
+			gameBoardPointList.add(point.getLower());
+			gameBoardPointList.add(point.getHighter());
+		}
+		return gameBoardPointList;
+	}
+	
+	private boolean pointsHaveSamePlayer(GameBoardPoint point,GameBoardPoint point2){
+		return pointsHaveSamePlayer(point) && pointsHaveSamePlayer(point2);
 	}
 	
 	/**
