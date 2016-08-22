@@ -1,132 +1,184 @@
 package com.mygdx.game.game;
 
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
+import com.mygdx.game.player.Human;
+import com.mygdx.game.player.Player;
 
 public class RuleTester {
-	
-	public static void main(String [] args){
-		RuleTester ruletestBoard = new RuleTester();
-		System.out.println("<----START---->");
-		ruletestBoard.printField();
-		System.out.println("<------------->");
-		ruletestBoard.setStoneSideAtPosition(new GameBoardPoint(StoneSide.PLAYER1), 2, 3);
-		ruletestBoard.printField();
-		System.out.println("<------------->");
-		ruletestBoard.setStoneSideAtPosition(new GameBoardPoint(StoneSide.PLAYER1), 2, 1);
-		ruletestBoard.printField();
-		System.out.println("<-----ENDE---->");
-	}
-	
-	/**
-	 * Testklasse zum testen der Regeln für das Spielfeld.
-	 */
-	
-	
-	private GameBoardPoint[] field;
-	private final int FIELD_LENGTH = 7;
-	private Rule rule;
-	
-	public RuleTester(){
-		this.field = new GameBoardPoint[FIELD_LENGTH * FIELD_LENGTH];
-		this.initField();
-		this.rule = new Rule();
-		rule.setGameboard(this.field);
-	}
-	
-	public GameBoardPoint[] getField(){
-		return this.field;
-	}
-	
-	public void setField(GameBoardPoint[] field){
-		this.field = field;
-	}
-	
-	/**
-	 * Diese Methode Initialisiert das Spielfeld Array, bedinnend von innen nach au�en.
-	 * 
-	 */
-	private void initField() {
-		int decency = 1;
-		int posX = 2;
-		int posY = 2;
 
-		for (int loop = 0; loop < 3; loop++) {
-			for (int height = 0; height < 3; height++) {
-				for (int width = 0; width < 3; width++) {
-
-					setFieldElementToEmpty(posX, posY);
-
-					posX += decency;
-				}
-
-				posX -= (decency * 3);
-
-				posY += decency;
-			}
-
-			posX -= 1;
-
-			posY = posY - (decency * 3) - 1;
-
-			decency++;
-		}
-		getFieldElement(3, 3).setSide(StoneSide.MIDDLE);
-
-	}
-
-	/**
-	 * Setzt die elemente im array auf ein Leeres Feld vom Typ Select.WITHOUT_PLAYER
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	private void setFieldElementToEmpty(int x, int y) {
-		field[(y * this.FIELD_LENGTH) + x] = new GameBoardPoint(GameBoardPoint.StoneSide.WITHOUT_PLAYER);
-	}
-	
-	/**
-	 * Gibt den GameboardPoint anhand der �bergebenen Koordinaten zur�ck.
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	private GameBoardPoint getFieldElement(int x, int y) {
-		return this.field[x + y * this.FIELD_LENGTH];
-	}
-	
-	/**
-	 * Gibt das Array auf der Konsole aus in einem Schachbrett Muster
-	 */
-	private void printField() {
-
-		for (int height = 0; height < FIELD_LENGTH; height++) {
-			for (int width = 0; width < FIELD_LENGTH; width++) {
-				GameBoardPoint stein = this.getFieldElement(width, height);
-				if (stein == null) {
-					System.out.print("O ");
-				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER1) {
-					System.out.print("1 ");
-				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER2) {
-					System.out.print("2 ");
-				} else if (stein.getSide() == GameBoardPoint.StoneSide.WITHOUT_PLAYER) {
-					System.out.print("X ");
-				} else {
-					System.out.print("H ");
-				}
-
-			}
+	public static void main(String[] args) {
+		Gameboard board = new Gameboard();
+		for(GameBoardPoint point : board.getgbpList()){
+			System.out.print("Highter " + point.getHighter());
+			System.out.print(" Lower " + point.getInner());
+			System.out.print(" Inner " +  point.getInner());
+			System.out.print(" Outer " + point.getOuter());
 			System.out.println();
 		}
 	}
-	
-	public void setStoneSideAtPosition(GameBoardPoint point, int x, int y){
-		if(rule.setStonePossible(x, y)){
-			setFieldElement(point,x,y);
+
+	/**
+	 * Testklasse zum testen der Regeln für das Spielfeld.
+	 */
+
+	private Gameboard field;
+	private final int FIELD_LENGTH = 7;
+	private Rule rule;
+
+	public RuleTester(int num) {
+		this.field = new Gameboard();
+		if (num < 2) {
+			this.rule = new Rule(this.field, new Human(StoneSide.PLAYER1));
+		} else {
+
 		}
-		
 	}
-	
-	private void setFieldElement(GameBoardPoint point,int x, int y){
-		this.field[x + (y * this.FIELD_LENGTH)] = point;
+
+	public Gameboard getField() {
+		return this.field;
 	}
+
+	public void setField(Gameboard field) {
+		this.field = field;
+	}
+
+	/**
+	 * WTF DELETE THIS SHIT xD
+	 * 
+	 * @param number
+	 * @return
+	 */
+	private void printField() {
+		int count = 0;
+		int fields = 7;
+		for (int i = 0; i < fields; i++) {
+			for (int j = 0; j < fields; j++) {
+				int pos = (i * fields) + j;
+				if (i == 0 || i == fields - 1) {
+					if (j == 0 || j == fields / 2 || j == fields - 1) {
+						System.out.print(getElement(pos));
+					} else {
+						System.out.print("O");
+					}
+				}
+				if (i == 1 || i == fields - 2) {
+					if (j > 0 && j % 2 != 0) {
+						System.out.print(getElement(pos));
+					} else {
+						System.out.print("O");
+					}
+				}
+				if (i == 2 || i == fields - 3) {
+					if (j > 1 && j < 5) {
+						System.out.print(getElement(pos));
+					} else {
+						System.out.print("O");
+					}
+				}
+				if (i == fields / 2) {
+					if (j != fields / 2) {
+						System.out.print(getElement(pos));
+					} else {
+						System.out.print("O");
+					}
+				}
+			}
+			System.out.println("");
+		}
+	}
+
+	/**
+	 * WTF DELETE THIS SHIT xD
+	 * 
+	 * @param number
+	 * @return
+	 */
+	private String getElement(int number) {
+		StoneSide side = null;
+		switch (number) {
+		case 0:
+			side = this.field.getgbpList().get(0).getSide();
+			break;
+		case 3:
+			side = this.field.getgbpList().get(1).getSide();
+			break;
+		case 6:
+			side = this.field.getgbpList().get(2).getSide();
+			break;
+		case 8:
+			side = this.field.getgbpList().get(8).getSide();
+			break;
+		case 10:
+			side = this.field.getgbpList().get(9).getSide();
+			break;
+		case 12:
+			side = this.field.getgbpList().get(10).getSide();
+			break;
+		case 16:
+			side = this.field.getgbpList().get(16).getSide();
+			break;
+		case 17:
+			side = this.field.getgbpList().get(17).getSide();
+			break;
+		case 18:
+			side = this.field.getgbpList().get(18).getSide();
+			break;
+		case 21:
+			side = this.field.getgbpList().get(7).getSide();
+			break;
+		case 22:
+			side = this.field.getgbpList().get(15).getSide();
+			break;
+		case 23:
+			side = this.field.getgbpList().get(23).getSide();
+			break;
+		case 25:
+			side = this.field.getgbpList().get(19).getSide();
+			break;
+		case 26:
+			side = this.field.getgbpList().get(11).getSide();
+			break;
+		case 27:
+			side = this.field.getgbpList().get(3).getSide();
+			break;
+		case 30:
+			side = this.field.getgbpList().get(22).getSide();
+			break;
+		case 31:
+			side = this.field.getgbpList().get(21).getSide();
+			break;
+		case 32:
+			side = this.field.getgbpList().get(20).getSide();
+			break;
+		case 36:
+			side = this.field.getgbpList().get(14).getSide();
+			break;
+		case 38:
+			side = this.field.getgbpList().get(13).getSide();
+			break;
+		case 40:
+			side = this.field.getgbpList().get(12).getSide();
+			break;
+		case 42:
+			side = this.field.getgbpList().get(6).getSide();
+			break;
+		case 45:
+			side = this.field.getgbpList().get(5).getSide();
+			break;
+		case 48:
+			side = this.field.getgbpList().get(4).getSide();
+			break;
+		}
+		String sign;
+		if (side == StoneSide.PLAYER1) {
+			sign = "P";
+		} else if (side == StoneSide.PLAYER2) {
+			sign = "C";
+		} else {
+			sign = "X";
+		}
+		return sign;
+	}
+
 }

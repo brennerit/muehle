@@ -68,7 +68,8 @@ public class Rule {
 			gameBoardPointList.addAll(searchLowerHigher(point));
 			gameBoardPointList.addAll(searchInnerOuter(point));
 		}else{
-			
+			gameBoardPointList.addAll(searchLower(point));
+			gameBoardPointList.addAll(searchHigher(point));
 		}
 		return gameBoardPointList;
 	}
@@ -78,6 +79,41 @@ public class Rule {
 		
 		return gameBoardPointList;
 	}
+	
+	/**
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private List<GameBoardPoint> searchLower(GameBoardPoint point){
+		GameBoardPoint tmp = point.getLower();
+		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
+		int count = 0;
+		while(pointsHaveSamePlayer(tmp,point) && count < 2){
+			count++;
+			gameBoardPointList.add(tmp);
+			tmp = tmp.getLower();
+		}
+		return gameBoardPointList;
+	}
+	
+	/**
+	 * 
+	 * @param point
+	 * @return
+	 */
+	private List<GameBoardPoint> searchHigher(GameBoardPoint point){
+		GameBoardPoint tmp = point.getHighter();
+		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
+		int count = 0;
+		while(pointsHaveSamePlayer(tmp,point) && count < 2){
+			count++;
+			gameBoardPointList.add(tmp);
+			tmp = tmp.getHighter();
+		}
+		return gameBoardPointList;
+	}
+	
 	
 	/**
 	 * 
