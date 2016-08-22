@@ -185,7 +185,9 @@ public class Gameboard {
 	private GameBoardPoint searchLowerNeighbours(GameBoardPoint gbp) {
 
 		try {
-			if (gbp.getNumber() != 8 || gbp.getNumber() != 16) {
+			if (gbp.getNumber() == 8 || gbp.getNumber() == 16) {
+
+			}else{
 				GameBoardPoint tmp = this.gbpList.get(gbp.getNumber() - 1);
 
 				tmp.setHighter(gbp);
