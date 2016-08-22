@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Diese Klasse repr�sentiert die stelle wo der Spielstein platziert werden kann. 
  * Sie kann entweder ein Stein eines Spielers darstellen, oder aber eine stelle, wo kein Stein liegt.
  * Sie kann auch eine Stelle sein, wo kein Spielstein liegt und auch keines liegen darf.
- * @author Ahmed
+ * @author Ahmed, Jonathan
  *
  */
 public class GameboardPoint {
@@ -21,9 +21,12 @@ public class GameboardPoint {
 	 * MIDDLE 			- Hier liegt kein Stein und darf auch keines! (wichtig)
 	 *
 	 */
-	private List<GameboardPoint> neighboursHorizontal;
-	private List<GameboardPoint> neighboursVertical;
-	
+	private GameboardPoint neighboursBottomSide;
+	private GameboardPoint neighboursRightSide;
+	private GameboardPoint neighboursLeftSide;
+	private GameboardPoint neighboursUpSide;
+	private int number;
+	private static int counter = 0;
 	
 	public enum StoneSide {
 		PLAYER1, PLAYER2, WITHOUT_PLAYER, MIDDLE;
@@ -34,9 +37,10 @@ public class GameboardPoint {
 	Sprite tex;
 	
 	public GameboardPoint( StoneSide s){
-		
-		
+		this.number = counter;
+		counter++;
 		this.setSide(s);
+		String side;
 	}
 	
 	public void setSide(StoneSide s){
@@ -46,28 +50,44 @@ public class GameboardPoint {
 		return side;
 	}
 	public void dispose(){
-		this.tex.getTexture().dispose();
-		
-	}
-
-	public List<GameboardPoint> getNeighboursHorizontal() {
-		return neighboursHorizontal;
-	}
-
-	public void setNeighboursHorizontal(List<GameboardPoint> neighboursHorizontal) {
-		this.neighboursHorizontal = neighboursHorizontal;
-	}
-
-	public List<GameboardPoint> getNeighboursVertical() {
-		return neighboursVertical;
-	}
-
-	public void setNeighboursVertical(List<GameboardPoint> neighboursVertical) {
-		this.neighboursVertical = neighboursVertical;
+		this.tex.getTexture().dispose();	
 	}
 	
-	
+	public void setNeighboursBottomSide(GameboardPoint neighboursBottomSide) {
+		this.neighboursBottomSide = neighboursBottomSide;
+	}
 
+	public void setNeighboursRightSide(GameboardPoint neighboursRightSide) {
+		this.neighboursRightSide = neighboursRightSide;
+	}
+
+	public void setNeighboursLeftSide(GameboardPoint neighboursLeftSide) {
+		this.neighboursLeftSide = neighboursLeftSide;
+	}
+
+	public void setNeighboursUpSide(GameboardPoint neighboursDownSide) {
+		this.neighboursUpSide = neighboursDownSide;
+	}
+
+	public GameboardPoint getNeighboursBottomSide() {
+		return neighboursBottomSide;
+	}
+
+	public GameboardPoint getNeighboursRightSide() {
+		return neighboursRightSide;
+	}
+
+	public GameboardPoint getNeighboursLeftSide() {
+		return neighboursLeftSide;
+	}
+
+	public GameboardPoint getNeighboursUpSide() {
+		return neighboursUpSide;
+	}
+
+	public int getNumber() {
+		return number;
+	}
 
 	
 }
