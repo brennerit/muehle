@@ -1,5 +1,8 @@
 package com.mygdx.game.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 
@@ -13,141 +16,93 @@ import com.mygdx.game.game.GameBoardPoint.StoneSide;
  **/
 public class Gameboard {
 
-	private GameBoardPoint[] field;
+	private List<GameBoardPoint> gbpList;
 
-	private final int FIELD_LENGHT = 7;
+	private final int MAX_GAMEBOARDPOINT = 24;
 
 	private Texture gamefieldTex;
-	
-	private GameboardPointConnecter connecter;
+
+	// private GameboardPointConnecter connecter;
 
 	private Rule rule;
-	
+
 	public Gameboard() {
 
-		this.field = new GameBoardPoint[FIELD_LENGHT * FIELD_LENGHT];
+		this.gbpList = new ArrayList<GameBoardPoint>();
 
 		this.gamefieldTex = new Texture("muehle_board.png");
 
 		this.initField();
 
 		this.rule = new Rule();
-				
+
 		this.printField();
-		
-		this.connecter = new GameboardPointConnecter(0, 0);
+
+		// this.connecter = new GameboardPointConnecter(0, 0);
 	}
 
 	/**
 	 * Mit dieser Methode erh�lt man die Texture vom Spielfeld
+	 * 
 	 * @return
 	 */
-	public Texture getGamefieldTexture() {		
+	public Texture getGamefieldTexture() {
 		return this.gamefieldTex;
 	}
-	
-	public Rule getRule(){
+
+	public Rule getRule() {
 		return this.rule;
 	}
-	
-	/**
-	 *  Mit dieser Methode erh�lt man das Spielfeld Array
-	 * @return
-	 */
-	public GameBoardPoint[] getGameboard(){
-		return this.field;
+
+	public void update() {
+
 	}
 
-	
-	public void update(){
-		this.connecter.update();
-	
-	}
-	
 	/**
-	 * Diese Methode Initialisiert das Spielfeld Array, bedinnend von innen nach au�en.
+	 * Diese Methode Initialisiert das Spielfeld Array, bedinnend von innen nach
+	 * au�en.
 	 * 
 	 */
 	private void initField() {
-		int decency = 1;
-		int posX = 2;
-		int posY = 2;
 
-		for (int loop = 0; loop < 3; loop++) {
-			for (int height = 0; height < 3; height++) {
-				for (int width = 0; width < 3; width++) {
-
-					setFieldElementToEmpty(posX, posY);
-
-					posX += decency;
-				}
-
-				posX -= (decency * 3);
-
-				posY += decency;
-			}
-
-			posX -= 1;
-
-			posY = posY - (decency * 3) - 1;
-
-			decency++;
+		for (int gameboardpointnumber = 0; gameboardpointnumber < this.MAX_GAMEBOARDPOINT; gameboardpointnumber++) {
+			
+			GameBoardPoint tmp = new GameBoardPoint(StoneSide.WITHOUT_PLAYER);
+			
+			this.initNeighbours(tmp);
+			
+			this.gbpList.add(tmp);
+			
 		}
-		this.getFieldElement(3, 3).setSide(StoneSide.MIDDLE);
 
 	}
-
+	
+	
 	/**
-	 * Setzt die elemente im array auf ein Leeres Feld vom Typ Select.WITHOUT_PLAYER
-	 * 
-	 * @param x
-	 * @param y
+	 * Sucht für das Übergebene GameboardPoint Objekt alle verfügbaren Nachbarn auf dem Spielfeld
+	 * @param gbp Das GameboardPoint Objekt, dass ein Punkt auf dem Spielfeld repräsentiert
 	 */
-	private void setFieldElementToEmpty(int x, int y) {
-		this.field[(y * this.FIELD_LENGHT) + x] = new GameBoardPoint(GameBoardPoint.StoneSide.WITHOUT_PLAYER);
+	private void initNeighbours(GameBoardPoint gbp ){		
+		
+		gbp.setHighter(this.gbpList.get(gbp.getNumber() + 1));
+		gbp.setLower(this.gbpList.get(gbp.getNumber() - 1));
+		
+		if(gbp.getNumber() % 2 != 0){
+			gbp.setInner(this.gbpList.get(gbp.getNumber() - 1));
+				
+		}
+		
 	}
+	
+	
 
-	/**
-	 * Gibt den GameboardPoint anhand der �bergebenen Koordinaten zur�ck.
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	private GameBoardPoint getFieldElement(int x, int y) {
-
-		return this.field[x + y * this.FIELD_LENGHT];
-	}
-
-	/**
-	 * Gibt das Array auf der Konsole aus in einem Schachbrett Muster
-	 */
 	private void printField() {
+		// TODO Auto-generated method stub
 
-		for (int height = 0; height < FIELD_LENGHT; height++) {
-			for (int width = 0; width < FIELD_LENGHT; width++) {
-				GameBoardPoint stein = this.getFieldElement(width, height);
-				if (stein == null) {
-					System.out.print("O ");
-				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER1) {
-					System.out.print("1 ");
-				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER2) {
-					System.out.print("2 ");
-				} else if (stein.getSide() == GameBoardPoint.StoneSide.WITHOUT_PLAYER) {
-					System.out.print("X ");
-				} else {
-					System.out.print("H ");
-				}
-
-			}
-			System.out.println();
-		}
 	}
 
 	public void dispose() {
-		this.gamefieldTex.dispose();
-		for (int i = 0; i < field.length; i++) {
-			this.field[i].dispose();
-		}
+
 	}
 
 }
