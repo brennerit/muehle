@@ -2,7 +2,7 @@ package com.mygdx.game.game;
 
 import java.util.List;
 
-import com.mygdx.game.game.GameboardPoint.StoneSide;
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 
 import java.awt.SystemColor;
 import java.util.ArrayList;
@@ -16,26 +16,31 @@ public class GameBoardJonbert {
 	
 	public static void main(String [] args){
 		GameBoardJonbert board = new GameBoardJonbert();
-		board.points.set(0, new GameboardPoint(StoneSide.PLAYER1));
-		board.points.set(1, new GameboardPoint(StoneSide.PLAYER1));
-		board.points.set(2, new GameboardPoint(StoneSide.PLAYER1));
+		board.points.set(0, new GameBoardPoint(StoneSide.PLAYER1));
+		board.points.set(1, new GameBoardPoint(StoneSide.PLAYER1));
+		board.points.set(2, new GameBoardPoint(StoneSide.PLAYER1));
 		
-		board.points.set(4, new GameboardPoint(StoneSide.PLAYER2));
-		board.points.set(5, new GameboardPoint(StoneSide.PLAYER2));
-		board.points.set(6, new GameboardPoint(StoneSide.PLAYER2));
+		board.points.set(4, new GameBoardPoint(StoneSide.PLAYER2));
+		board.points.set(5, new GameBoardPoint(StoneSide.PLAYER2));
+		board.points.set(6, new GameBoardPoint(StoneSide.PLAYER2));
 		
 		board.printField();
 	}
 	
-	private List<GameboardPoint> points;
+	private List<GameBoardPoint> points;
+
 	private static final int LISTSIZE = 24;
 	
 	public GameBoardJonbert(){
 		this.points = new ArrayList<>();
 		for(int i = 0;i < LISTSIZE;i++){
-			points.add(new GameboardPoint(StoneSide.WITHOUT_PLAYER));
+			points.add(new GameBoardPoint(StoneSide.WITHOUT_PLAYER));
 		}
 		setNeighbours();
+	}
+	
+	public List<GameBoardPoint> getPoints() {
+		return points;
 	}
 	
 	/**
@@ -52,15 +57,15 @@ public class GameBoardJonbert {
 		this.points.get(1).setNeighboursRightSide(this.points.get(5));
 		this.points.get(1).setNeighboursBottomSide(this.points.get(3));
 		
-		this.points.get(2).setNeighboursLeftSide(null);
+		this.points.get(2).setNeighboursLeftSide(this.points.get(1));
 		this.points.get(2).setNeighboursUpSide(null);
-		this.points.get(2).setNeighboursRightSide(this.points.get(1));
-		this.points.get(2).setNeighboursBottomSide(this.points.get(7));
+		this.points.get(2).setNeighboursRightSide(null);
+		this.points.get(2).setNeighboursBottomSide(this.points.get(3));
 		
-		this.points.get(3).setNeighboursLeftSide(null);
-		this.points.get(3).setNeighboursUpSide(null);
-		this.points.get(3).setNeighboursRightSide(this.points.get(1));
-		this.points.get(3).setNeighboursBottomSide(this.points.get(7));
+		this.points.get(3).setNeighboursLeftSide(this.points.get(11));
+		this.points.get(3).setNeighboursUpSide(this.points.get(2));
+		this.points.get(3).setNeighboursRightSide(null);
+		this.points.get(3).setNeighboursBottomSide(this.points.get(4));
 		
 		this.points.get(4).setNeighboursLeftSide(null);
 		this.points.get(4).setNeighboursUpSide(null);
@@ -104,7 +109,7 @@ public class GameBoardJonbert {
 	 * @param number
 	 * @return
 	 */
-	public void printField(){
+	private void printField(){
 		int count = 0;
 		int fields = 7;
 		for( int i = 0;i < fields; i++){
@@ -148,7 +153,7 @@ public class GameBoardJonbert {
 	 * @param number
 	 * @return
 	 */
-	public String getElement(int number){
+	private String getElement(int number){
 		StoneSide side = null;
 		switch(number){
 		case 0:

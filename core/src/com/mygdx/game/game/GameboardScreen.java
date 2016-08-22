@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.mygdx.game.Main;
-import com.mygdx.game.game.GameboardPoint.StoneSide;
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.startscreen.StartScreen;
 import com.mygdx.game.startscreen.StartScreen.Mode;
 
 /**
- * Diese Klasse repräsentiert das eigentliche Spiel. Sie enthält das eigentliche Spielfeld und den modus.
+ * Diese Klasse reprï¿½sentiert das eigentliche Spiel. Sie enthï¿½lt das eigentliche Spielfeld und den modus.
  * @author Ahmed
  *
  */
@@ -53,7 +53,7 @@ public class GameboardScreen extends ScreenAdapter {
 	}
 
 	/**
-	 * Diese Methode schreibt die Überschrift, um welchen modus es sich handelt.
+	 * Diese Methode schreibt die ï¿½berschrift, um welchen modus es sich handelt.
 	 */
 	private void printHeadline() {
 		String title = (this.getMode() == Mode.VS_PLAYER)?"Player Vs Player":"Player vs CPU";

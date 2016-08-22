@@ -1,6 +1,6 @@
 package com.mygdx.game.game;
 
-import com.mygdx.game.game.GameboardPoint.StoneSide;
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 
 public class RuleTester {
 	
@@ -9,10 +9,10 @@ public class RuleTester {
 		System.out.println("<----START---->");
 		ruletestBoard.printField();
 		System.out.println("<------------->");
-		ruletestBoard.setStoneSideAtPosition(new GameboardPoint(StoneSide.PLAYER1), 2, 3);
+		ruletestBoard.setStoneSideAtPosition(new GameBoardPoint(StoneSide.PLAYER1), 2, 3);
 		ruletestBoard.printField();
 		System.out.println("<------------->");
-		ruletestBoard.setStoneSideAtPosition(new GameboardPoint(StoneSide.PLAYER1), 2, 1);
+		ruletestBoard.setStoneSideAtPosition(new GameBoardPoint(StoneSide.PLAYER1), 2, 1);
 		ruletestBoard.printField();
 		System.out.println("<-----ENDE---->");
 	}
@@ -22,22 +22,22 @@ public class RuleTester {
 	 */
 	
 	
-	private GameboardPoint[] field;
+	private GameBoardPoint[] field;
 	private final int FIELD_LENGTH = 7;
 	private Rule rule;
 	
 	public RuleTester(){
-		this.field = new GameboardPoint[FIELD_LENGTH * FIELD_LENGTH];
+		this.field = new GameBoardPoint[FIELD_LENGTH * FIELD_LENGTH];
 		this.initField();
 		this.rule = new Rule();
 		rule.setGameboard(this.field);
 	}
 	
-	public GameboardPoint[] getField(){
+	public GameBoardPoint[] getField(){
 		return this.field;
 	}
 	
-	public void setField(GameboardPoint[] field){
+	public void setField(GameBoardPoint[] field){
 		this.field = field;
 	}
 	
@@ -81,7 +81,7 @@ public class RuleTester {
 	 * @param y
 	 */
 	private void setFieldElementToEmpty(int x, int y) {
-		field[(y * this.FIELD_LENGTH) + x] = new GameboardPoint(GameboardPoint.StoneSide.WITHOUT_PLAYER);
+		field[(y * this.FIELD_LENGTH) + x] = new GameBoardPoint(GameBoardPoint.StoneSide.WITHOUT_PLAYER);
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public class RuleTester {
 	 * @param y
 	 * @return
 	 */
-	private GameboardPoint getFieldElement(int x, int y) {
+	private GameBoardPoint getFieldElement(int x, int y) {
 		return this.field[x + y * this.FIELD_LENGTH];
 	}
 	
@@ -101,14 +101,14 @@ public class RuleTester {
 
 		for (int height = 0; height < FIELD_LENGTH; height++) {
 			for (int width = 0; width < FIELD_LENGTH; width++) {
-				GameboardPoint stein = this.getFieldElement(width, height);
+				GameBoardPoint stein = this.getFieldElement(width, height);
 				if (stein == null) {
 					System.out.print("O ");
-				} else if (stein.getSide() == GameboardPoint.StoneSide.PLAYER1) {
+				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER1) {
 					System.out.print("1 ");
-				} else if (stein.getSide() == GameboardPoint.StoneSide.PLAYER2) {
+				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER2) {
 					System.out.print("2 ");
-				} else if (stein.getSide() == GameboardPoint.StoneSide.WITHOUT_PLAYER) {
+				} else if (stein.getSide() == GameBoardPoint.StoneSide.WITHOUT_PLAYER) {
 					System.out.print("X ");
 				} else {
 					System.out.print("H ");
@@ -119,14 +119,14 @@ public class RuleTester {
 		}
 	}
 	
-	public void setStoneSideAtPosition(GameboardPoint point, int x, int y){
+	public void setStoneSideAtPosition(GameBoardPoint point, int x, int y){
 		if(rule.setStonePossible(x, y)){
 			setFieldElement(point,x,y);
 		}
 		
 	}
 	
-	private void setFieldElement(GameboardPoint point,int x, int y){
+	private void setFieldElement(GameBoardPoint point,int x, int y){
 		this.field[x + (y * this.FIELD_LENGTH)] = point;
 	}
 }

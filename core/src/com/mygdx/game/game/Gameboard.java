@@ -1,11 +1,11 @@
 package com.mygdx.game.game;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.mygdx.game.game.GameboardPoint.StoneSide;
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 
 /**
- * Diese Klasse Repräsentiert das Spielfeld. Das Spielfeld besteht aus
- * Spielsteine und ist 9 * 9 groß Dabei sind die viele Felder NULL, da sie nicht
+ * Diese Klasse Reprï¿½sentiert das Spielfeld. Das Spielfeld besteht aus
+ * Spielsteine und ist 9 * 9 groï¿½ Dabei sind die viele Felder NULL, da sie nicht
  * gebraucht werden.
  * 
  * @author Ahmed
@@ -13,7 +13,7 @@ import com.mygdx.game.game.GameboardPoint.StoneSide;
  **/
 public class Gameboard {
 
-	private GameboardPoint[] field;
+	private GameBoardPoint[] field;
 
 	private final int FIELD_LENGHT = 7;
 
@@ -25,7 +25,7 @@ public class Gameboard {
 	
 	public Gameboard() {
 
-		this.field = new GameboardPoint[FIELD_LENGHT * FIELD_LENGHT];
+		this.field = new GameBoardPoint[FIELD_LENGHT * FIELD_LENGHT];
 
 		this.gamefieldTex = new Texture("muehle_board.png");
 
@@ -39,7 +39,7 @@ public class Gameboard {
 	}
 
 	/**
-	 * Mit dieser Methode erhält man die Texture vom Spielfeld
+	 * Mit dieser Methode erhï¿½lt man die Texture vom Spielfeld
 	 * @return
 	 */
 	public Texture getGamefieldTexture() {		
@@ -51,10 +51,10 @@ public class Gameboard {
 	}
 	
 	/**
-	 *  Mit dieser Methode erhält man das Spielfeld Array
+	 *  Mit dieser Methode erhï¿½lt man das Spielfeld Array
 	 * @return
 	 */
-	public GameboardPoint[] getGameboard(){
+	public GameBoardPoint[] getGameboard(){
 		return this.field;
 	}
 
@@ -65,7 +65,7 @@ public class Gameboard {
 	}
 	
 	/**
-	 * Diese Methode Initialisiert das Spielfeld Array, bedinnend von innen nach außen.
+	 * Diese Methode Initialisiert das Spielfeld Array, bedinnend von innen nach auï¿½en.
 	 * 
 	 */
 	private void initField() {
@@ -104,16 +104,16 @@ public class Gameboard {
 	 * @param y
 	 */
 	private void setFieldElementToEmpty(int x, int y) {
-		this.field[(y * this.FIELD_LENGHT) + x] = new GameboardPoint(GameboardPoint.StoneSide.WITHOUT_PLAYER);
+		this.field[(y * this.FIELD_LENGHT) + x] = new GameBoardPoint(GameBoardPoint.StoneSide.WITHOUT_PLAYER);
 	}
 
 	/**
-	 * Gibt den GameboardPoint anhand der übergebenen Koordinaten zurück.
+	 * Gibt den GameboardPoint anhand der ï¿½bergebenen Koordinaten zurï¿½ck.
 	 * @param x
 	 * @param y
 	 * @return
 	 */
-	private GameboardPoint getFieldElement(int x, int y) {
+	private GameBoardPoint getFieldElement(int x, int y) {
 
 		return this.field[x + y * this.FIELD_LENGHT];
 	}
@@ -125,14 +125,14 @@ public class Gameboard {
 
 		for (int height = 0; height < FIELD_LENGHT; height++) {
 			for (int width = 0; width < FIELD_LENGHT; width++) {
-				GameboardPoint stein = this.getFieldElement(width, height);
+				GameBoardPoint stein = this.getFieldElement(width, height);
 				if (stein == null) {
 					System.out.print("O ");
-				} else if (stein.getSide() == GameboardPoint.StoneSide.PLAYER1) {
+				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER1) {
 					System.out.print("1 ");
-				} else if (stein.getSide() == GameboardPoint.StoneSide.PLAYER2) {
+				} else if (stein.getSide() == GameBoardPoint.StoneSide.PLAYER2) {
 					System.out.print("2 ");
-				} else if (stein.getSide() == GameboardPoint.StoneSide.WITHOUT_PLAYER) {
+				} else if (stein.getSide() == GameBoardPoint.StoneSide.WITHOUT_PLAYER) {
 					System.out.print("X ");
 				} else {
 					System.out.print("H ");
