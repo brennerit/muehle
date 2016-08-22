@@ -20,12 +20,46 @@ public class GameBoardPoint {
 	 * WITHOUT_STONE 	- Hier liegt kein Stein
 	 *
 	 */
-	private GameBoardPoint neighboursBottom;
-	private GameBoardPoint neighboursRight;
-	private GameBoardPoint neighboursLeft;
-	private GameBoardPoint neighboursUp;
+	private GameBoardPoint inner;
+	private GameBoardPoint highter;
+	private GameBoardPoint lower;
+	private GameBoardPoint outer;
 	private int number;
 	private static int counter = 0;
+	
+	
+	public GameBoardPoint getInner() {
+		return inner;
+	}
+
+	public void setInner(GameBoardPoint inner) {
+		this.inner = inner;
+	}
+
+	public GameBoardPoint getHighter() {
+		return highter;
+	}
+
+	public void setHighter(GameBoardPoint highter) {
+		this.highter = highter;
+	}
+
+	public GameBoardPoint getLower() {
+		return lower;
+	}
+
+	public void setLower(GameBoardPoint lower) {
+		this.lower = lower;
+	}
+
+	public GameBoardPoint getOuter() {
+		return outer;
+	}
+
+	public void setOuter(GameBoardPoint outer) {
+		this.outer = outer;
+	}
+
 	
 	public enum StoneSide {
 		PLAYER1, PLAYER2, WITHOUT_PLAYER;
@@ -50,38 +84,6 @@ public class GameBoardPoint {
 	}
 	public void dispose(){
 		this.tex.getTexture().dispose();	
-	}
-	
-	public void setNeighboursBottomSide(GameBoardPoint neighboursBottom) {
-		this.neighboursBottom = neighboursBottom;
-	}
-
-	public void setNeighboursRightSide(GameBoardPoint neighboursRight) {
-		this.neighboursRight = neighboursRight;
-	}
-
-	public void setNeighboursLeftSide(GameBoardPoint neighboursLeft) {
-		this.neighboursLeft = neighboursLeft;
-	}
-
-	public void setNeighboursUpSide(GameBoardPoint neighboursDown) {
-		this.neighboursUp = neighboursDown;
-	}
-
-	public GameBoardPoint getNeighboursBottom() {
-		return neighboursBottom;
-	}
-
-	public GameBoardPoint getNeighboursRight() {
-		return neighboursRight;
-	}
-
-	public GameBoardPoint getNeighboursLeft() {
-		return neighboursLeft;
-	}
-
-	public GameBoardPoint getNeighboursUp() {
-		return neighboursUp;
 	}
 
 	public int getNumber() {
