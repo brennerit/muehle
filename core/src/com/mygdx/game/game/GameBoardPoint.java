@@ -7,17 +7,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * Diese Klasse repr�sentiert die stelle wo der Spielstein platziert werden kann. 
- * Sie kann entweder ein Stein eines Spielers darstellen, oder aber eine stelle, wo kein Stein liegt.
- * Sie kann auch eine Stelle sein, wo kein Spielstein liegt und auch keines liegen darf.
+ * Diese Klasse repr�sentiert die stelle wo der Spielstein platziert werden
+ * kann. Sie kann entweder ein Stein eines Spielers darstellen, oder aber eine
+ * stelle, wo kein Stein liegt. Sie kann auch eine Stelle sein, wo kein
+ * Spielstein liegt und auch keines liegen darf.
+ * 
  * @author Ahmed, Jonathan
  *
  */
 public class GameBoardPoint {
 
 	/**
-	 * PLAYER1 und PLAYER2 sind selbsterkl�rend.
-	 * WITHOUT_STONE 	- Hier liegt kein Stein
+	 * PLAYER1 und PLAYER2 sind selbsterkl�rend. WITHOUT_STONE - Hier liegt kein
+	 * Stein
 	 *
 	 */
 	private GameBoardPoint inner;
@@ -25,9 +27,17 @@ public class GameBoardPoint {
 	private GameBoardPoint lower;
 	private GameBoardPoint outer;
 	private int number;
-	private static int counter = 0;
-	
-	
+
+	private StoneSide side;
+
+	private Sprite tex;
+
+	public GameBoardPoint(StoneSide s, int number) {
+		this.number = number;
+		this.setSide(s);
+		
+	}
+
 	public GameBoardPoint getInner() {
 		return inner;
 	}
@@ -60,35 +70,24 @@ public class GameBoardPoint {
 		this.outer = outer;
 	}
 
-	
 	public enum StoneSide {
 		PLAYER1, PLAYER2, WITHOUT_PLAYER;
 	}
 
-	StoneSide side;
-	
-	Sprite tex;
-	
-	public GameBoardPoint( StoneSide s){
-		this.number = counter;
-		counter++;
-		this.setSide(s);
-		String side;
+	public void setSide(StoneSide s) {
+		this.side = s;
 	}
-	
-	public void setSide(StoneSide s){
-		this.side= s;
-	}
-	public StoneSide getSide(){
+
+	public StoneSide getSide() {
 		return side;
 	}
-	public void dispose(){
-		this.tex.getTexture().dispose();	
+
+	public void dispose() {
+		this.tex.getTexture().dispose();
 	}
 
 	public int getNumber() {
 		return number;
 	}
 
-	
 }
