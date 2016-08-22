@@ -12,7 +12,6 @@ import com.mygdx.game.player.Player;
 public class Rule {
 
 	private GameBoardJonbert gameboard;
-	private StoneSide stoneSide;
 	private Player currentPlayer;
 	private final int FIELD_LENGHT = 7;
 	private final int MILL = 3;
@@ -24,9 +23,10 @@ public class Rule {
 	public GameBoardJonbert getGameboard(GameBoardJonbert gameboard, Player player) {
 		this.gameboard = gameboard;
 		this.currentPlayer = player;
-		
 		return this.gameboard;
 	}
+	
+	
 	
 	/**
 	 * Prueft ob es moeglich ist einen Stein an diesem Punkt des Spielfeldes zu setzen.
@@ -62,19 +62,42 @@ public class Rule {
 	
 	public boolean isMillXAxis(GameBoardPoint point){
 		boolean millXAxis = false;
-		int mill = 0;
-		while(point.getNeighboursLeft()!=null){
-			
+		int mill = 1;
+		int inner;
+		int outer;
+		GameBoardPoint tempPoint;
+		if(point.getNumber()%2==0){
+			inner = 2;
+			outer = 2;
+		}else{
+			inner = 1;
+			outer = 1;
 		}
-		while(point.getNeighboursRight() != null){
-			
+		while(inner > 0){
+			inner--;
+			tempPoint = point.getInner();
+			if(tempPoint.getSide()==this.stoneSide){
+				mill++;
+			}
+		}
+		while(outer > 0){
+			outer--;
+			tempPoint = point.getOuter();
+			if(tempPoint.getSide() == this.stoneSide){
+				
+			}
 		}
 		return millXAxis;
 	}
 		
 	public boolean isMillYAxis(GameBoardPoint point){
 		boolean millYAxis = false;
-		
+		while(point.higher()!=null){
+			
+		}
+		while(point.lower() != null){
+			
+		}
 		return millYAxis;
 	}
 	

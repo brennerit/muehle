@@ -1,12 +1,12 @@
 package com.mygdx.game.player;
 
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.game.GameboardScreen.PlayerId;
 
 public class Human extends Player {
 
-	public Human(PlayerId id) {
-		super(id);
-		// TODO Auto-generated constructor stub
+	public Human(StoneSide stoneSide) {
+		super(stoneSide);
 	}
 
 	

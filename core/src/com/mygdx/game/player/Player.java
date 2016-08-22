@@ -1,14 +1,18 @@
 package com.mygdx.game.player;
 
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.game.GameboardScreen.PlayerId;
 
 public abstract class Player {
 
-	PlayerId id;
+	private StoneSide stoneSide;	
 	
-	public Player(PlayerId id){
-		
-		this.id = id;
+	public Player(StoneSide id){
+		this.stoneSide = stoneSide;
+	}
+	
+	public StoneSide getStoneSide(){
+		return this.stoneSide;
 	}
 	
 }
