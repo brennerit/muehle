@@ -17,7 +17,10 @@ public class RuleTester {
 		board.getgbpList().get(0).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(1).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(2).setSide(StoneSide.PLAYER1);
-		System.out.println(board.getRule().isMill(point).size());
+		System.out.println("size -> "+board.getRule().isMill(point));
+		System.out.println(StoneSide.PLAYER1 == StoneSide.PLAYER1);
+		System.out.println(board.getRule().getCurrentPlayer().toString());
+		System.out.println(board.getRule().getCurrentPlayer().getStoneSide());
 	}
 
 	
@@ -28,11 +31,7 @@ public class RuleTester {
 
 	public RuleTester(int num) {
 		this.field = new GameBoardLogic();
-		if (num < 2) {
-			this.rule = new Rule(this.field, new Human(StoneSide.PLAYER1));
-		} else {
-
-		}
+		this.rule = new Rule(this.field, new Human(StoneSide.PLAYER1));
 	}
 
 	public GameBoardLogic getField() {

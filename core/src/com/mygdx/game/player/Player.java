@@ -13,7 +13,7 @@ public abstract class Player {
 	private StoneSide stoneSide;	
 	
 	public Player(StoneSide id){
-		this.stoneSide = stoneSide;
+		this.stoneSide = id;
 	}
 	
 	public StoneSide getStoneSide(){

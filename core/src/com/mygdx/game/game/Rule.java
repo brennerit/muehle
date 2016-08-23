@@ -78,7 +78,7 @@ public class Rule {
 	 */
 	public List<GameBoardPoint> isMill(GameBoardPoint point){
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		if( point.getNumber() % 2 == 0){
+		if( point.getNumber() % 2 != 0){
 			gameBoardPointList.addAll(searchLowerHigher(point));
 			gameBoardPointList.addAll(searchInnerOuter(point));
 			gameBoardPointList.add(point);
@@ -108,16 +108,12 @@ public class Rule {
 	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
 	 */
 	private List<GameBoardPoint> searchLower(GameBoardPoint point){
-		GameBoardPoint tmp = point.getLower();
+		GameBoardPoint lower = point.getLower();
+		GameBoardPoint lowerLower = lower.getLower();
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		int count = 0;
-		while(pointsHaveSamePlayer(tmp,point) && count < 2){
-			count++;
-			gameBoardPointList.add(tmp);
-			tmp = tmp.getLower();
-		}
-		if(count < 2){
-			gameBoardPointList.clear();
+		if(pointsHaveSamePlayer(lower, lowerLower)){
+			gameBoardPointList.add(lower);
+			gameBoardPointList.add(lowerLower);
 		}
 		return gameBoardPointList;
 	}
@@ -128,16 +124,12 @@ public class Rule {
 	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
 	 */
 	private List<GameBoardPoint> searchHigher(GameBoardPoint point){
-		GameBoardPoint tmp = point.getHighter();
+		GameBoardPoint higher = point.getHighter();
+		GameBoardPoint higherHigher = higher.getHighter();
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		int count = 0;
-		while(pointsHaveSamePlayer(tmp,point) && count < 2){
-			count++;
-			gameBoardPointList.add(tmp);
-			tmp = tmp.getHighter();
-		}
-		if(count < 2){
-			gameBoardPointList.clear();
+		if(pointsHaveSamePlayer(higher, higherHigher)){
+			gameBoardPointList.add(higher);
+			gameBoardPointList.add(higherHigher);
 		}
 		return gameBoardPointList;
 	}
@@ -172,7 +164,8 @@ public class Rule {
 	 */
 	private boolean pointsHaveSamePlayer(GameBoardPoint point){
 		if(point == null) return false;
-		return (point.getSide()==this.currentPlayer.getStoneSide())? true : false;
+		System.out.println((point.getSide() == (this.currentPlayer.getStoneSide()))? true : false);
+		return (point.getSide() == (this.currentPlayer.getStoneSide()))? true : false;
 	}
 		
 }
