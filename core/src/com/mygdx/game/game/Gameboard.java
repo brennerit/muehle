@@ -24,7 +24,7 @@ public class Gameboard {
 	private GameBoardLogic logic;
 	private List<GameBoardPointConnecter> connecterlist;
 
-	// private Rule rule;
+
 
 	public Gameboard() {
 		this.gamefieldTex = new Texture("muehle_board.png");

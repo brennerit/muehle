@@ -11,7 +11,7 @@ import com.mygdx.game.startscreen.StartScreen.Mode;
 
 /**
  * Diese Klasse repr�sentiert das eigentliche Spiel. Sie enth�lt das eigentliche
- * Spielfeld und den modus.
+ * Spielfeld und den modus .
  * 
  * @author Ahmed
  *
