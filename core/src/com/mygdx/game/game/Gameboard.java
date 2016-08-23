@@ -1,9 +1,13 @@
 package com.mygdx.game.game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 
 /**
@@ -16,29 +20,47 @@ import com.mygdx.game.game.GameBoardPoint.StoneSide;
  **/
 public class Gameboard {
 
-	private List<GameBoardPoint> gbpList;
-
-	private final int MAX_GAMEBOARDPOINT = 24;
-
 	private Texture gamefieldTex;
+	private GameBoardLogic logic;
+	private List<GameBoardPointConnecter> connecterlist;
 
-	// private GameboardPointConnecter connecter;
-
-	private Rule rule;
+	// private Rule rule;
 
 	public Gameboard() {
-
-		this.gbpList = new ArrayList<GameBoardPoint>();
-
 		this.gamefieldTex = new Texture("muehle_board.png");
+		this.logic = new GameBoardLogic();
 
-		this.initField();
+		this.connecterlist = new ArrayList<GameBoardPointConnecter>();
 
-		// this.rule = new Rule();
+		// Außen
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(0), 250, 380));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(1), 440, 380));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(2), 630, 380));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(3), 630, 200));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(4), 630, 20));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(5), 440, 20));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(6), 250, 20));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(7), 250, 200));
 
-		this.printField();
+		// Mitte
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(8), 310, 320));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(9), 440, 320));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(10), 570, 320));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(11), 570, 200));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(12), 570, 80));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(13), 440, 80));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(14), 310, 80));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(15), 310, 200));
 
-		// this.connecter = new GameboardPointConnecter(0, 0);
+		// Innen
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(16), 370, 260));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(17), 440, 260));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(18), 510, 260));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(19), 510, 200));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(20), 510, 140));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(21), 440, 140));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(22), 370, 140));
+		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(23), 370, 200));
 	}
 
 	/**
@@ -50,175 +72,21 @@ public class Gameboard {
 		return this.gamefieldTex;
 	}
 
-	public Rule getRule() {
-		return this.rule;
-	}
-
 	public void update() {
 
+		this.logic.update();
+
 	}
 
-	/**
-	 * Diese Methode Initialisiert das Spielfeld , bedinnend von innen nach
-	 * au�en.
-	 * 
-	 */
-	private void initField() {
+	public void render(SpriteBatch batch) {
 
-		for (int gameboardpointnumber = 0; gameboardpointnumber < this.MAX_GAMEBOARDPOINT; gameboardpointnumber++) {
+		Iterator<GameBoardPointConnecter> iter = this.connecterlist.iterator();
 
-			GameBoardPoint tmp = new GameBoardPoint(StoneSide.WITHOUT_PLAYER, gameboardpointnumber);
-
-			this.gbpList.add(tmp);
-
-			this.initNeighbours(tmp);
-
+		while (iter.hasNext()) {
+			GameBoardPointConnecter gc = iter.next();
+			gc.render(batch);
 		}
 
-	}
-
-	/**
-	 * Sucht für das Übergebene GameboardPoint Objekt alle verfügbaren Nachbarn
-	 * auf dem Spielfeld
-	 * 
-	 * @param gbp
-	 *            Das GameboardPoint Objekt, dass ein Punkt auf dem Spielfeld
-	 *            repräsentiert
-	 */
-	private void initNeighbours(GameBoardPoint gbp) {
-		gbp.setLower(this.searchLowerNeighbours(gbp));
-		gbp.setHighter(this.searchHighterNeighbours(gbp));
-
-		gbp.setInner(this.searchInnerNeighbours(gbp));
-		gbp.setOuter(this.searchOuterNeighbours(gbp));
-
-	}
-
-	/**
-	 * Sucht für den übergebenen GameboardPoint den passenden Inneren Nachbarn.
-	 * Dabei wird beim Nachbarn die Verbindung zum Übergebenen GameboardPoint
-	 * gesichert.
-	 * 
-	 * @param gbp
-	 * @return
-	 */
-	private GameBoardPoint searchInnerNeighbours(GameBoardPoint gbp) {
-
-		if (gbp.getNumber() % 2 != 0) {
-
-			try {
-				GameBoardPoint tmp = this.gbpList.get(gbp.getNumber() + 8);
-				tmp.setOuter(gbp);
-				return tmp;
-			} catch (IndexOutOfBoundsException e) {
-				// TODO: handle exception
-			}
-		}
-		return null;
-
-	}
-
-	/**
-	 * Sucht für den übergebenen GameboardPoint den passenden Outer Nachbarn.
-	 * Dabei wird beim Nachbarn die Verbindung zum Übergebenen GameboardPoint
-	 * gesichert.
-	 * 
-	 * @param gbp
-	 * @return
-	 */
-	private GameBoardPoint searchOuterNeighbours(GameBoardPoint gbp) {
-
-		if (gbp.getNumber() % 2 != 0) {
-
-			try {
-				GameBoardPoint tmp = this.gbpList.get(gbp.getNumber() - 8);
-				tmp.setInner(gbp);
-				return tmp;
-			} catch (IndexOutOfBoundsException e) {
-				// TODO: handle exception
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Sucht den Nachfolger des Übergebenen Objektes. Dabei wird beim Nachbarn
-	 * die Verbindung zum Übergebenen GameboardPoint gesichert. Einen Nachfolger
-	 * kann es nur bei 7, 15 und 23 geben.
-	 * 
-	 * @param gbp
-	 * @return
-	 */
-	private GameBoardPoint searchHighterNeighbours(GameBoardPoint gbp) {
-
-		GameBoardPoint tmp;
-
-		switch (gbp.getNumber()) {
-		case 7:
-			tmp = this.gbpList.get(0);
-			break;
-		case 15:
-			tmp = this.gbpList.get(8);
-			break;
-		case 23:
-			tmp = this.gbpList.get(16);
-			break;
-		default:
-			tmp = null;
-		}
-
-		if (tmp != null) {
-			tmp.setLower(gbp);
-		}
-
-		return tmp;
-
-	}
-
-	/**
-	 * Sucht den Vorgänger des Übergebenen Objektes. Dabei wird beim Nachbarn
-	 * die Verbindung zum Übergebenen GameboardPoint gesichert.
-	 * 
-	 * @param gbp
-	 * @return
-	 */
-	private GameBoardPoint searchLowerNeighbours(GameBoardPoint gbp) {
-
-		try {
-			if (gbp.getNumber() != 8 && gbp.getNumber() != 16) {
-				GameBoardPoint tmp = this.gbpList.get(gbp.getNumber() - 1);
-
-				tmp.setHighter(gbp);
-				return tmp;
-			}
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		return null;
-	}
-
-	private void printField() {
-		for (int i = 0; i < MAX_GAMEBOARDPOINT; i++) {
-			GameBoardPoint tmp = this.gbpList.get(i);
-
-			System.out.print("Nummer: " + i + "-I Lower  " + tmp.getLower().getNumber() + "-I Higher "
-					+ tmp.getHighter().getNumber() + "\n");
-
-			if (tmp.getNumber() % 2 != 0) {
-				// System.out.println("-I Inner: " + tmp.getInner().getNumber()
-				// + "-I Outer "
-				// + tmp.getOuter().getNumber());
-			} else {
-				System.out.println();
-			}
-		}
-
-	}
-	
-	public List<GameBoardPoint> getgbpList(){
-		return this.gbpList;
 	}
 
 	public void dispose() {
