@@ -87,18 +87,32 @@ public class Rule {
 			gameBoardPointList.addAll(searchHigher(point));
 			gameBoardPointList.add(point);
 		}
+		if(gameBoardPointList.size() < 2) gameBoardPointList.clear();
 		return gameBoardPointList;
 	}
 	
 	/**
-	 * ToDo nicht fertig!
 	 * Prueft ob die direkten Nachbarn Inner und Outer vom gleichen Spieler besetzt sind und gibt diese als Liste zurück.
 	 * @param point {@link GameBoardPoint} der den Ausgangspunkt darstellt, von dem aus gesucht wird.
 	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
 	 */
 	private List<GameBoardPoint> searchInnerOuter(GameBoardPoint point){
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		
+		GameBoardPoint inner = point.getInner();
+		GameBoardPoint outer = point.getOuter();
+		while(inner!=null){
+			if(pointsHaveSamePlayer(inner)){
+				gameBoardPointList.add(inner);
+			}
+			inner = inner.getInner();
+		}
+		while(outer!=null){
+			if(pointsHaveSamePlayer(outer)){
+				gameBoardPointList.add(outer);
+			}
+			outer = outer.getOuter();
+		}
+		if(gameBoardPointList.size()< 2) gameBoardPointList.clear();
 		return gameBoardPointList;
 	}
 	
@@ -143,7 +157,12 @@ public class Rule {
 	 */
 	private List<GameBoardPoint> searchLowerHigher(GameBoardPoint point){
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		
+		GameBoardPoint lower = point.getLower();
+		GameBoardPoint higher = point.getHighter();
+		if(pointsHaveSamePlayer(lower, higher)){
+			gameBoardPointList.add(higher);
+			gameBoardPointList.add(lower);
+		}
 		return gameBoardPointList;
 	}
 	

@@ -18,21 +18,41 @@ public class RuleTester {
 		GameBoardLogic board = new GameBoardLogic();
 		GameBoardPoint point = board.getgbpList().get(0);
 		
+		RuleTester test = new RuleTester(1);
+		test.setField(board);
+		
 		// tester mit lower lower
+		board.getRule().setCurrentPlayer(new Human(StoneSide.PLAYER1));
 		board.getgbpList().get(0).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(1).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(2).setSide(StoneSide.PLAYER1);
-		muehleListe = board.getRule().isMill(point);
-		System.out.println(muehleListe);
+		board.getgbpList().get(7).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(6).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(15).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(23).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(8).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(14).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(11).setSide(StoneSide.PLAYER1);
 		
-		// test mit higher higher 
-		point = board.getgbpList().get(2);
-		board.getRule().setCurrentPlayer(new Human(StoneSide.PLAYER2));
-		board.getgbpList().get(2).setSide(StoneSide.PLAYER2);
+		board.getgbpList().get(19).setSide(StoneSide.PLAYER2);
+		board.getgbpList().get(12).setSide(StoneSide.PLAYER2);
 		board.getgbpList().get(3).setSide(StoneSide.PLAYER2);
+		board.getgbpList().get(10).setSide(StoneSide.PLAYER2);
 		board.getgbpList().get(4).setSide(StoneSide.PLAYER2);
-		muehleListe = board.getRule().isMill(point);
-		System.out.println(muehleListe);
+		board.getgbpList().get(5).setSide(StoneSide.PLAYER2);
+		int [] numbers = {0, 7, 15, 23};
+		for(Integer num: numbers){
+			point = board.getgbpList().get(num);
+			muehleListe = board.getRule().isMill(point);
+			System.out.println(muehleListe);
+		}
+		int [] numbers2 ={13, 4, 5, 3, 11, 19};
+		for(Integer num: numbers2){
+			point = board.getgbpList().get(num);
+			muehleListe = board.getRule().isMill(point);
+			System.out.println(muehleListe);
+		}
+		test.printField();
 	}
 
 	
