@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
+import com.mygdx.game.player.Human;
+import com.mygdx.game.player.Player;
 
 /**
  * Die Logik vom Spielfeld
@@ -14,7 +16,7 @@ import com.mygdx.game.game.GameBoardPoint.StoneSide;
 public class GameBoardLogic {
 
 	private List<GameBoardPoint> gbpList;
-
+	private Rule rule;
 	private final int MAX_GAMEBOARDPOINT = 24;
 
 	public GameBoardLogic() {
@@ -23,7 +25,7 @@ public class GameBoardLogic {
 
 		this.initField();
 
-		// this.rule = new Rule();
+		this.rule = new Rule(this,new Human(StoneSide.WITHOUT_PLAYER));
 
 		this.printField();
 

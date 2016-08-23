@@ -15,28 +15,42 @@ import com.mygdx.game.player.Player;
  */
 public class Rule {
 
-	private Gameboard gameboard;
+	private GameBoardLogic gameboard;
 	private Player currentPlayer;
 	private final int FIELD_LENGHT = 7;
 	private final int MILL = 3;
 	
-	public Rule(Gameboard gameboard, Player player){
+	public Rule(GameBoardLogic gameboard, Player player){
 		this.gameboard = gameboard;
 		this.currentPlayer = player;
 	}
 	
-	public Gameboard getGameboard() {
+	/**
+	 * Gibt das {@link Gameboard} zurueck.
+	 * @return Das {@link Gameboard} in seinem aktuellen Zustand.
+	 */
+	public GameBoardLogic getGameBoardLogic() {
 		return gameboard;
 	}
-
-	public void setGameboard(Gameboard gameboard) {
+	
+	/**
+	 * Setzt ein neues {@link Gameboard}.
+	 * @param gameboard Das neue {@link Gameboard}
+	 */
+	public void setGameBoardLogic(GameBoardLogic gameboard) {
 		this.gameboard = gameboard;
 	}
-
+	/**
+	 * 
+	 * @return den aktuellen {@link Player}
+	 */
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
-
+	/**
+	 * 
+	 * @param currentPlayer setzt einen neuen aktuellen {@link Player}
+	 */
 	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
@@ -59,21 +73,29 @@ public class Rule {
 	
 	/**
 	 * Sucht die Punkte, die sich in diesem Moment in einer Muehle befinden.
-	 * @param point Ausgangspunkt von dem gesucht wird.
-	 * @return {@link List} die die {@link GameBoardPoint}s enthaelt.
+	 * @param point {@link GameBoardPoint} von dem aus gesucht wird.
+	 * @return {@link List} die die {@link GameBoardPoint}s enthaelt, die zu der Muehle gehoeren.
 	 */
-	public List<GameBoardPoint> isMillLower(GameBoardPoint point){
+	public List<GameBoardPoint> isMill(GameBoardPoint point){
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
 		if( point.getNumber() % 2 == 0){
 			gameBoardPointList.addAll(searchLowerHigher(point));
 			gameBoardPointList.addAll(searchInnerOuter(point));
+			gameBoardPointList.add(point);
 		}else{
 			gameBoardPointList.addAll(searchLower(point));
 			gameBoardPointList.addAll(searchHigher(point));
+			gameBoardPointList.add(point);
 		}
 		return gameBoardPointList;
 	}
 	
+	/**
+	 * ToDo nicht fertig!
+	 * Prueft ob die direkten Nachbarn Inner und Outer vom gleichen Spieler besetzt sind und gibt diese als Liste zurück.
+	 * @param point {@link GameBoardPoint} der den Ausgangspunkt darstellt, von dem aus gesucht wird.
+	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
+	 */
 	private List<GameBoardPoint> searchInnerOuter(GameBoardPoint point){
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
 		
@@ -81,9 +103,9 @@ public class Rule {
 	}
 	
 	/**
-	 * 
-	 * @param point
-	 * @return
+	 * Prueft ob die 2 folgenden Punkte den gleichen Spieler haben und gibt diese, falls eine Muehle existiert zurueck.
+	 * @param point {@link GameBoardPoint} der den Ausgangspunkt darstellt, von dem aus gesucht wird.
+	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
 	 */
 	private List<GameBoardPoint> searchLower(GameBoardPoint point){
 		GameBoardPoint tmp = point.getLower();
@@ -94,13 +116,16 @@ public class Rule {
 			gameBoardPointList.add(tmp);
 			tmp = tmp.getLower();
 		}
+		if(count < 2){
+			gameBoardPointList.clear();
+		}
 		return gameBoardPointList;
 	}
 	
 	/**
-	 * 
-	 * @param point
-	 * @return
+	 * Prueft ob die 2 vorherigen Punkte den gleichen Spieler haben und gibt diese, falls eine Muehle existiert zurueck.
+	 * @param point {@link GameBoardPoint} der den Ausgangspunkt darstellt, von dem aus gesucht wird.
+	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
 	 */
 	private List<GameBoardPoint> searchHigher(GameBoardPoint point){
 		GameBoardPoint tmp = point.getHighter();
@@ -111,32 +136,39 @@ public class Rule {
 			gameBoardPointList.add(tmp);
 			tmp = tmp.getHighter();
 		}
+		if(count < 2){
+			gameBoardPointList.clear();
+		}
 		return gameBoardPointList;
 	}
 	
 	
 	/**
-	 * 
-	 * @param point
-	 * @return
+	 * ToDo nicht fertig!
+	 * Prueft ob die direkten Nachbarn Higher und Lower vom gleichen Spieler besetzt sind und gibt diese als Liste zurück.
+	 * @param point {@link GameBoardPoint} der den Ausgangspunkt darstellt, von dem aus gesucht wird.
+	 * @return {@link List} mit {@link GameBoardPoint} falls eine Muehle vorhanden ist, sonst eine leere {@link List}e
 	 */
 	private List<GameBoardPoint> searchLowerHigher(GameBoardPoint point){
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		if(pointsHaveSamePlayer(point.getLower(),point.getLower())){
-			gameBoardPointList.add(point.getLower());
-			gameBoardPointList.add(point.getHighter());
-		}
+		
 		return gameBoardPointList;
 	}
 	
+	/**
+	 * prueft ob die {@link GameBoardPoint}s dem aktuellen Spieler zugeteilt sind.
+	 * @param point {@link GameBoardPoint}
+	 * @param point2 {@link GameBoardPoint}
+	 * @return true wenn sie dem Spieler zugeteilt sind, sonst false;
+	 */
 	private boolean pointsHaveSamePlayer(GameBoardPoint point,GameBoardPoint point2){
 		return pointsHaveSamePlayer(point) && pointsHaveSamePlayer(point2);
 	}
 	
 	/**
-	 * 
-	 * @param point
-	 * @return
+	 * prueft ob der {@link GameBoardPoint} dem aktuellen Spieler zugeteilt ist.
+	 * @param point 
+	 * @return true wenn sie dem Spieler zugeteilt sind, sonst false;
 	 */
 	private boolean pointsHaveSamePlayer(GameBoardPoint point){
 		if(point == null) return false;

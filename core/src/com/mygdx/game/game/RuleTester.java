@@ -4,23 +4,23 @@ import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.player.Human;
 import com.mygdx.game.player.Player;
-
+/**
+ * Klasse für die Tests der Spielfeldlogik.
+ * @author jonathan
+ *
+ */
 public class RuleTester {
 
 	public static void main(String[] args) {
-		Gameboard board = new Gameboard();
-		for(GameBoardPoint point : board.getgbpList()){
-			System.out.print("Highter " + point.getHighter());
-			System.out.print(" Lower " + point.getInner());
-			System.out.print(" Inner " +  point.getInner());
-			System.out.print(" Outer " + point.getOuter());
-			System.out.println();
-		}
+		GameBoardLogic board = new GameBoardLogic();
+		GameBoardPoint point = board.getgbpList().get(0);
+		board.getgbpList().get(0).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(1).setSide(StoneSide.PLAYER1);
+		board.getgbpList().get(2).setSide(StoneSide.PLAYER1);
+		System.out.println(board.getRule().isMill(point).size());
 	}
 
-	/**
-	 * Testklasse zum testen der Regeln für das Spielfeld.
-	 */
+	
 
 	private Gameboard field;
 	private final int FIELD_LENGTH = 7;
