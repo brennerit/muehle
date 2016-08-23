@@ -1,5 +1,7 @@
 package com.mygdx.game.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Cursor.SystemCursor;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.player.Human;
@@ -12,15 +14,25 @@ import com.mygdx.game.player.Player;
 public class RuleTester {
 
 	public static void main(String[] args) {
+		List<GameBoardPoint> muehleListe;
 		GameBoardLogic board = new GameBoardLogic();
 		GameBoardPoint point = board.getgbpList().get(0);
+		
+		// tester mit lower lower
 		board.getgbpList().get(0).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(1).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(2).setSide(StoneSide.PLAYER1);
-		System.out.println("size -> "+board.getRule().isMill(point));
-		System.out.println(StoneSide.PLAYER1 == StoneSide.PLAYER1);
-		System.out.println(board.getRule().getCurrentPlayer().toString());
-		System.out.println(board.getRule().getCurrentPlayer().getStoneSide());
+		muehleListe = board.getRule().isMill(point);
+		System.out.println(muehleListe);
+		
+		// test mit higher higher 
+		point = board.getgbpList().get(2);
+		board.getRule().setCurrentPlayer(new Human(StoneSide.PLAYER2));
+		board.getgbpList().get(2).setSide(StoneSide.PLAYER2);
+		board.getgbpList().get(3).setSide(StoneSide.PLAYER2);
+		board.getgbpList().get(4).setSide(StoneSide.PLAYER2);
+		muehleListe = board.getRule().isMill(point);
+		System.out.println(muehleListe);
 	}
 
 	

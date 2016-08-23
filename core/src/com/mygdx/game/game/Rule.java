@@ -164,7 +164,6 @@ public class Rule {
 	 */
 	private boolean pointsHaveSamePlayer(GameBoardPoint point){
 		if(point == null) return false;
-		System.out.println((point.getSide() == (this.currentPlayer.getStoneSide()))? true : false);
 		return (point.getSide() == (this.currentPlayer.getStoneSide()))? true : false;
 	}
 		
