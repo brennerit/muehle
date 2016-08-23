@@ -22,12 +22,12 @@ public class RuleTester {
 
 	
 
-	private Gameboard field;
+	private GameBoardLogic field;
 	private final int FIELD_LENGTH = 7;
 	private Rule rule;
 
 	public RuleTester(int num) {
-		this.field = new Gameboard();
+		this.field = new GameBoardLogic();
 		if (num < 2) {
 			this.rule = new Rule(this.field, new Human(StoneSide.PLAYER1));
 		} else {
@@ -35,11 +35,11 @@ public class RuleTester {
 		}
 	}
 
-	public Gameboard getField() {
+	public GameBoardLogic getField() {
 		return this.field;
 	}
 
-	public void setField(Gameboard field) {
+	public void setField(GameBoardLogic field) {
 		this.field = field;
 	}
 

@@ -200,4 +200,16 @@ public class GameBoardLogic {
 		return this.gbpList;
 	}
 
+
+	public Rule getRule() {
+		return rule;
+	}
+
+
+	public void setRule(Rule rule) {
+		this.rule = rule;
+	}
+	
+	
+	
 }
