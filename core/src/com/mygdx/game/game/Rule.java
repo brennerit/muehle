@@ -143,7 +143,7 @@ public class Rule {
 	 * @return true wenn er entfernt werden kann, sonst false.
 	 */
 	public boolean removeStonePossible(GameBoardPoint point) {
-		boolean removeIsPossible = (!isMill(point).isEmpty()) ? true : false;
+		boolean removeIsPossible = (isMill(point).isEmpty()) ? true : false;
 		if (removeIsPossible) {
 			decreasePlayerStoneNumber(point);
 		}

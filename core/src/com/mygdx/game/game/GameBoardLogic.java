@@ -27,7 +27,7 @@ public class GameBoardLogic {
 
 		this.rule = new Rule(this);
 
-		this.printField();
+		//this.printField();
 
 		// this.connecter = new GameboardPointConnecter(0, 0);
 	}
