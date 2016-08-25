@@ -22,5 +22,11 @@ public class CPU extends Player {
 	private void calculate(){
 		
 	}
-
+	/*
+	 * Zu Beginn ist Beweglichkeit wichtiger wie Mühlen. Die inneren Ecken der Felder sind als erstes zu besetzen.
+	 * 
+	 * Es ist besser eine eigene Mühle zu öffnen anstatt eine gegnerische zu verhinden.
+	 * 
+	 * Zwickmühlen bilden ist erstrebenswert
+	 */
 }
