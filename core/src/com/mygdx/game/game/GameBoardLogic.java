@@ -25,7 +25,7 @@ public class GameBoardLogic {
 
 		this.initField();
 
-		this.rule = new Rule(this,new Human(StoneSide.WITHOUT_PLAYER));
+		this.rule = new Rule(this);
 
 		this.printField();
 

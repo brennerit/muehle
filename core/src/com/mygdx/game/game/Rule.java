@@ -16,13 +16,15 @@ import com.mygdx.game.player.Player;
 public class Rule {
 
 	private GameBoardLogic gameboard;
-	private Player currentPlayer;
+
+	private int StonesPlayer1;
+	private int StonesPlayer2;
+	
 	private final int FIELD_LENGHT = 7;
 	private final int MILL = 3;
 	
-	public Rule(GameBoardLogic gameboard, Player player){
+	public Rule(GameBoardLogic gameboard){
 		this.gameboard = gameboard;
-		this.currentPlayer = player;
 	}
 	
 	/**
@@ -39,20 +41,6 @@ public class Rule {
 	 */
 	public void setGameBoardLogic(GameBoardLogic gameboard) {
 		this.gameboard = gameboard;
-	}
-	/**
-	 * 
-	 * @return den aktuellen {@link Player}
-	 */
-	public Player getCurrentPlayer() {
-		return currentPlayer;
-	}
-	/**
-	 * 
-	 * @param currentPlayer setzt einen neuen aktuellen {@link Player}
-	 */
-	public void setCurrentPlayer(Player currentPlayer) {
-		this.currentPlayer = currentPlayer;
 	}
 
 
@@ -101,13 +89,13 @@ public class Rule {
 		GameBoardPoint inner = point.getInner();
 		GameBoardPoint outer = point.getOuter();
 		while(inner!=null){
-			if(pointsHaveSamePlayer(inner)){
+			if(pointsHaveSamePlayer(point,inner)){
 				gameBoardPointList.add(inner);
 			}
 			inner = inner.getInner();
 		}
 		while(outer!=null){
-			if(pointsHaveSamePlayer(outer)){
+			if(pointsHaveSamePlayer(point,outer)){
 				gameBoardPointList.add(outer);
 			}
 			outer = outer.getOuter();
@@ -125,7 +113,7 @@ public class Rule {
 		GameBoardPoint lower = point.getLower();
 		GameBoardPoint lowerLower = lower.getLower();
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		if(pointsHaveSamePlayer(lower, lowerLower)){
+		if(pointsHaveSamePlayer(point, lowerLower)&& pointsHaveSamePlayer(lower, point)){
 			gameBoardPointList.add(lower);
 			gameBoardPointList.add(lowerLower);
 		}
@@ -141,7 +129,7 @@ public class Rule {
 		GameBoardPoint higher = point.getHighter();
 		GameBoardPoint higherHigher = higher.getHighter();
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
-		if(pointsHaveSamePlayer(higher, higherHigher)){
+		if(pointsHaveSamePlayer(point, higherHigher)&& pointsHaveSamePlayer(point, higher)){
 			gameBoardPointList.add(higher);
 			gameBoardPointList.add(higherHigher);
 		}
@@ -159,7 +147,7 @@ public class Rule {
 		List<GameBoardPoint> gameBoardPointList = new ArrayList<>();
 		GameBoardPoint lower = point.getLower();
 		GameBoardPoint higher = point.getHighter();
-		if(pointsHaveSamePlayer(lower, higher)){
+		if(pointsHaveSamePlayer(point, higher)&&pointsHaveSamePlayer(lower, point)){
 			gameBoardPointList.add(higher);
 			gameBoardPointList.add(lower);
 		}
@@ -167,23 +155,39 @@ public class Rule {
 	}
 	
 	/**
-	 * prueft ob die {@link GameBoardPoint}s dem aktuellen Spieler zugeteilt sind.
+	 * prueft ob die {@link GameBoardPoint}s die gleiche {@link StoneSide} haben.
 	 * @param point {@link GameBoardPoint}
 	 * @param point2 {@link GameBoardPoint}
-	 * @return true wenn sie dem Spieler zugeteilt sind, sonst false;
+	 * @return true wenn sie die gleiche Seite haben, sonst false;
 	 */
 	private boolean pointsHaveSamePlayer(GameBoardPoint point,GameBoardPoint point2){
-		return pointsHaveSamePlayer(point) && pointsHaveSamePlayer(point2);
+		return (point.getSide() == point2.getSide());
 	}
 	
 	/**
-	 * prueft ob der {@link GameBoardPoint} dem aktuellen Spieler zugeteilt ist.
-	 * @param point 
-	 * @return true wenn sie dem Spieler zugeteilt sind, sonst false;
+	 * Gibt den Spieler zurueck der gewonnen hat.
+	 * @return den {@link Player} der gewonnen hat.
 	 */
-	private boolean pointsHaveSamePlayer(GameBoardPoint point){
-		if(point == null) return false;
-		return (point.getSide() == (this.currentPlayer.getStoneSide()))? true : false;
+	public Player won(){
+		int player1 = 0;
+		int player2 = 0;
+		for(GameBoardPoint point: this.gameboard.getgbpList()){
+			if(point.getSide()==StoneSide.PLAYER1){
+				player1++;
+			}
+			if(point.getSide()==StoneSide.PLAYER2){
+				player2++;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Prueft ob das Spiel unentschieden ist.
+	 * @return true falls ja, sonst false.
+	 */
+	public boolean remi(){
+		return false;
 	}
 		
 }

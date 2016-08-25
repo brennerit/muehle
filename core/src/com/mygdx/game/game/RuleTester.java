@@ -22,7 +22,6 @@ public class RuleTester {
 		test.setField(board);
 		
 		// tester mit lower lower
-		board.getRule().setCurrentPlayer(new Human(StoneSide.PLAYER1));
 		board.getgbpList().get(0).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(1).setSide(StoneSide.PLAYER1);
 		board.getgbpList().get(2).setSide(StoneSide.PLAYER1);
@@ -42,12 +41,14 @@ public class RuleTester {
 		board.getgbpList().get(5).setSide(StoneSide.PLAYER2);
 		int [] numbers = {0, 7, 15, 23};
 		for(Integer num: numbers){
+			System.out.print(num + "	:	");
 			point = board.getgbpList().get(num);
 			muehleListe = board.getRule().isMill(point);
 			System.out.println(muehleListe);
 		}
 		int [] numbers2 ={13, 4, 5, 3, 11, 19};
 		for(Integer num: numbers2){
+			System.out.print(num + "	:	");
 			point = board.getgbpList().get(num);
 			muehleListe = board.getRule().isMill(point);
 			System.out.println(muehleListe);
@@ -63,7 +64,7 @@ public class RuleTester {
 
 	public RuleTester(int num) {
 		this.field = new GameBoardLogic();
-		this.rule = new Rule(this.field, new Human(StoneSide.PLAYER1));
+		this.rule = new Rule(this.field);
 	}
 
 	public GameBoardLogic getField() {
