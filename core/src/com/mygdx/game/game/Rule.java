@@ -8,20 +8,7 @@ import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.player.Player;
 
 /**
- * <p>
- * Diese Klasse repraesentiert die Regeln für das Muehlespiel. Es ist
- * ausschliesslich moeglich zu pruefen, ob die Regeln eingehalten werden. Die
- * Klasse nimmt keine Aenderungen an dem Spielfeld vor.
- * </p>
- * <p>
- * Die Regen koennen folgende Optionen pruefen:
- * <ol>
- * <li>ob es moeglich ist eine Stein zu setzen/bewegen</li>
- * <li>welcher Spieler gewonnen hat</li>
- * <li>ob das Spiel unentschieden ist</li>
- * <li>ob an einer best. Stelle des Spielfeldes eine Muehle vorhanden ist</li>
- * </ol>
- * </p>
+ * Diese Klasse repräsentieren die Regeln eines Spiels.
  * 
  * @author Jonathan
  *
@@ -69,7 +56,7 @@ public class Rule {
 	 * @return true wenn der Stein gesetzt werden kann. false wenn der Stein
 	 *         nicht gesetzt werden kann.
 	 */
-	public boolean setStonePossible(GameBoardPoint point) {
+	public boolean setStone(GameBoardPoint point) {
 		boolean setStonePossible;
 		if (point.getSide() == StoneSide.WITHOUT_PLAYER) {
 			setStonePossible = true;
@@ -142,7 +129,7 @@ public class Rule {
 	 *            {@link GameBoardPoint} der entfernt werden soll.
 	 * @return true wenn er entfernt werden kann, sonst false.
 	 */
-	public boolean removeStonePossible(GameBoardPoint point) {
+	public boolean removeStone(GameBoardPoint point) {
 		boolean removeIsPossible = (isMill(point).isEmpty()) ? true : false;
 		if (removeIsPossible) {
 			decreasePlayerStoneNumber(point);
