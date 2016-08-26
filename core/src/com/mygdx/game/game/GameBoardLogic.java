@@ -18,6 +18,8 @@ import com.mygdx.game.player.Player;
  */
 public class GameBoardLogic {
 
+
+
 	private List<GameBoardPoint> gbpList;
 	private Rule rule;
 	private final int MAX_GAMEBOARDPOINT = 24;
@@ -217,6 +219,30 @@ public class GameBoardLogic {
 		Collections.copy(copy, this.gbpList);
 		return copy;
 
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gbpList == null) ? 0 : gbpList.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameBoardLogic other = (GameBoardLogic) obj;
+		if (gbpList == null) {
+			if (other.gbpList != null)
+				return false;
+		} else if (!gbpList.equals(other.gbpList))
+			return false;
+		return true;
 	}
 
 }
