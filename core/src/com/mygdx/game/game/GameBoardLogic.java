@@ -1,6 +1,8 @@
 package com.mygdx.game.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +12,7 @@ import com.mygdx.game.player.Player;
 
 /**
  * Die Logik vom Spielfeld
+ * 
  * @author ahmed
  *
  */
@@ -27,11 +30,10 @@ public class GameBoardLogic {
 
 		this.rule = new Rule(this);
 
-		//this.printField();
+		// this.printField();
 
 		// this.connecter = new GameboardPointConnecter(0, 0);
 	}
-
 
 	/**
 	 * Diese Methode Initialisiert das Spielfeld , bedinnend von innen nach
@@ -200,16 +202,21 @@ public class GameBoardLogic {
 		return this.gbpList;
 	}
 
-
 	public Rule getRule() {
 		return rule;
 	}
 
-
 	public void setRule(Rule rule) {
 		this.rule = rule;
 	}
-	
-	
-	
+
+	public List<GameBoardPoint> getCopyList() {
+
+		List<GameBoardPoint> copy = new ArrayList<>();
+
+		Collections.copy(copy, this.gbpList);
+		return copy;
+
+	}
+
 }
