@@ -22,6 +22,9 @@ public class Rule {
 
 	private final int FIELD_LENGHT = 7;
 	private final int MILL = 3;
+	
+	private int nothingHappens = 50;
+	private int sameState = 0;
 
 	public Rule(GameBoardLogic gameboard) {
 		this.gameBoardLogic = gameboard;
@@ -48,7 +51,9 @@ public class Rule {
 		this.gameBoardLogic = gameboard;
 		calculateStonesOnBoard();
 	}
-
+	
+	
+	
 	/**
 	 * Prueft ob es moeglich ist einen Stein an diesem Punkt des Spielfeldes zu
 	 * setzen.
@@ -66,7 +71,19 @@ public class Rule {
 		}
 		return setStonePossible;
 	}
-
+	
+	public void increaseRoundWithoutMill(){
+		this.nothingHappens++;
+	}
+	
+	public void resetRoundWithoutMill(){
+		this.nothingHappens = 0;
+	}
+	
+	public int getRoundsWithoutMill(){
+		return this.nothingHappens;
+	}
+	
 	/**
 	 * /** Berechnet die moeglichen Positionen an die ein {@link GameBoardPoint}
 	 * gesetzt werden kann.
@@ -93,33 +110,33 @@ public class Rule {
 	 * @return die {@link StoneSide} des Gewinners.
 	 */
 	public StoneSide won() {
-		StoneSide winner = null;
+		StoneSide winner = StoneSide.WITHOUT_PLAYER;
 		if (this.stonesPlayer1 < 3) {
 			winner = StoneSide.PLAYER2;
 		} else if (this.stonesPlayer2 < 3) {
 			winner = StoneSide.PLAYER1;
 		} else {
-			winner = movePlayerPossible(StoneSide.PLAYER1) ? StoneSide.PLAYER2 : null;
-			winner = movePlayerPossible(StoneSide.PLAYER2) ? StoneSide.PLAYER1 : null;
+			winner = movePlayerPossible(StoneSide.PLAYER1) ? StoneSide.PLAYER2 : StoneSide.WITHOUT_PLAYER;
+			winner = movePlayerPossible(StoneSide.PLAYER2) ? StoneSide.PLAYER1 : StoneSide.WITHOUT_PLAYER; 
 		}
 		return winner;
 	}
 
 	/**
-	 * ToDo noch nicht implementiert - gibt nur false zurueeck - Prueft ob das
 	 * Spiel unentschieden ist.
 	 * 
 	 * @return true falls ja, sonst false.
 	 */
 	public boolean remi() {
-		/**
-		 * unentschieden, wenn: - beide Spieler zustimmen - innerhalb 50 Zuegen
-		 * keine Muehle geschlossen wird - 3 mal die selbe Stellung erreicht
-		 * wird
-		 */
-		return false;
+		boolean isRemi = false;
+		if(this.nothingHappens > 49){
+			isRemi = true;
+		}else if(sameState()){
+			isRemi = true;
+		}
+		return isRemi;
 	}
-
+	
 	/**
 	 * Prueft ob es moeglich ist den Stein zu entfernen. Wenn der Stein entfernt
 	 * werden kann wird in den Regeln die Anzahl der Spielstein für den
@@ -129,12 +146,8 @@ public class Rule {
 	 *            {@link GameBoardPoint} der entfernt werden soll.
 	 * @return true wenn er entfernt werden kann, sonst false.
 	 */
-	public boolean removeStone(GameBoardPoint point) {
-		boolean removeIsPossible = (isMill(point).isEmpty()) ? true : false;
-		if (removeIsPossible) {
-			decreasePlayerStoneNumber(point);
-		}
-		return removeIsPossible;
+	public boolean deleteStone(GameBoardPoint point) {
+		return (isMill(point).isEmpty()) ? true : false;
 	}
 
 	public int getStonesPlayer1() {
@@ -168,7 +181,35 @@ public class Rule {
 			gameBoardPointList.clear();
 		return gameBoardPointList;
 	}
-
+	
+	/**
+	 * Verringert die Anzahl der Spielsteine eines Spielers.
+	 * 
+	 * @param point
+	 *            {@link GameBoardPoint} der entfernt wurde.
+	 */
+	public void decreasePlayerStoneNumber(GameBoardPoint point) {
+		if (point.getSide() == StoneSide.PLAYER1) {
+			stonesPlayer1--;
+		} else {
+			stonesPlayer2--;
+		}
+	}
+	
+	/**
+	 * Ermittelt anhand der {@link StoneSide} die Steine auf dem Spielbrett die enfternt werden können.
+	 * @param side 
+	 * @return Liste die die {@link GameBoardPoint}
+	 */
+	public List<GameBoardPoint> getStonesWihtoutMill(StoneSide side){
+		List<GameBoardPoint> pointList = new ArrayList<>();
+		for(GameBoardPoint point: this.gameBoardLogic.getgbpList()){
+			if(point.getSide()== side && isMill(point).isEmpty()){
+				pointList.add(point);
+			}
+		}
+		return pointList;
+	}
 	/**
 	 * Prueft ob die direkten Nachbarn Inner und Outer vom gleichen Spieler
 	 * besetzt sind und gibt diese als Liste zurück.
@@ -278,20 +319,6 @@ public class Rule {
 	}
 
 	/**
-	 * Verringert die Anzahl der Spielsteine eines Spielers.
-	 * 
-	 * @param point
-	 *            {@link GameBoardPoint} der entfernt wurde.
-	 */
-	private void decreasePlayerStoneNumber(GameBoardPoint point) {
-		if (point.getSide() == StoneSide.PLAYER1) {
-			stonesPlayer1--;
-		} else {
-			stonesPlayer2--;
-		}
-	}
-
-	/**
 	 * Setzt die Anzahl der Spielsteine der Spieler auf 0 und berechnet dann neu
 	 * wie viele sich noch auf dem Spielfeld befinden. Diese Methode muss
 	 * aufgerufen werden, wenn die Regeln neu erzeugt wird, die Gamelogik neu
@@ -331,6 +358,16 @@ public class Rule {
 			}
 		}
 		return isPossible;
+	}
+	
+	/**
+	 * Prueft ob ein Spielfeld 3 mal im gleichen zustand war.
+	 * @return
+	 */
+	private boolean sameState(){
+		boolean isAtTheSameState = false;
+		
+		return isAtTheSameState;
 	}
 
 }

@@ -77,10 +77,10 @@ public class LogicTests {
 	@Test
 	public void deleteStone() {
 		for (Integer num : positionsWithMill) {
-			assertFalse(rule.removeStone(rule.getGameBoardLogic().getgbpList().get(num)));
+			assertFalse(rule.deleteStone(rule.getGameBoardLogic().getgbpList().get(num)));
 		}
 		for (Integer num : positionsWithoutMill) {
-			assertTrue(rule.removeStone(rule.getGameBoardLogic().getgbpList().get(num)));
+			assertTrue(rule.deleteStone(rule.getGameBoardLogic().getgbpList().get(num)));
 		}
 	}
 
