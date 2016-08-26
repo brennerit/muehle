@@ -6,6 +6,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.Main;
+import com.mygdx.game.observer.Event;
+import com.mygdx.game.observer.Event.Event_Message;
+import com.mygdx.game.observer.Observer;
 import com.mygdx.game.startscreen.StartScreen;
 import com.mygdx.game.startscreen.StartScreen.Mode;
 
@@ -16,7 +19,7 @@ import com.mygdx.game.startscreen.StartScreen.Mode;
  * @author Ahmed
  *
  */
-public class GameboardScreen extends ScreenAdapter {
+public class GameboardScreen extends ScreenAdapter implements Observer {
 
 	public enum PlayerId {
 		PLAYER1, PLAYER2;
@@ -27,6 +30,8 @@ public class GameboardScreen extends ScreenAdapter {
 	private Mode mode;
 
 	private Gameboard gameboard;
+
+	private String message;
 
 	public GameboardScreen(Main game, Mode mode) {
 		this.game = game;
@@ -49,10 +54,11 @@ public class GameboardScreen extends ScreenAdapter {
 			this.game.setScreen(new StartScreen(game));
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT)) {
-	
+
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ALT_RIGHT)) {
-			//Gdx.graphics.setWindowedMode(Main.WINDOW_WIDTH, Main.WINDOW_HEIGHT);
+			// Gdx.graphics.setWindowedMode(Main.WINDOW_WIDTH,
+			// Main.WINDOW_HEIGHT);
 		}
 	}
 
@@ -62,6 +68,32 @@ public class GameboardScreen extends ScreenAdapter {
 	private void printHeadline() {
 		String title = (this.getMode() == Mode.VS_PLAYER) ? "Player Vs Player" : "Player vs CPU";
 		this.game.getFont().draw(this.game.getBatch(), title, Main.WINDOW_WIDTH / 2 - 50, Main.WINDOW_HEIGHT - 50);
+	}
+
+	public void setMessage(String message) {
+
+	}
+
+	public void readEventMessage(Event_Message e) {
+
+		String tmp = "";
+		switch (e) {
+		case PLAYER1_TURN:
+			tmp = "Spieler 1 ist dran";
+			break;
+		case PLAYER2_TURN:
+			tmp = "Spieler 2 ist dran";
+			break;
+		case PLAYER1_WIN:
+			tmp = "Spieler 1 hat gewonnen";
+			break;
+		case PLAYER2_WIN:
+			tmp = "Spieler 2 hat gewonnen";
+			break;
+		}
+
+		this.setMessage(tmp);
+
 	}
 
 	@Override
@@ -78,14 +110,13 @@ public class GameboardScreen extends ScreenAdapter {
 		this.game.getBatch().draw(this.gameboard.getGamefieldTexture(),
 				(Main.WINDOW_WIDTH / 2) - (this.gameboard.getGamefieldTexture().getWidth() / 2), 0, 400, 400);
 
-		
-		//Test GIb mausposition an
+		// Test GIb mausposition an
 		this.game.getFont().draw(this.game.getBatch(), "PosX: " + Gdx.input.getX(), 10, 10);
-	
-		int posY = Main.WINDOW_HEIGHT - Gdx.input.getY()  ;
+
+		int posY = Main.WINDOW_HEIGHT - Gdx.input.getY();
 		this.game.getFont().draw(this.game.getBatch(), "PosY: " + posY, 10, 30);
 		// Test Ende
-		
+
 		this.gameboard.render(this.game.getBatch());
 
 		this.printHeadline();
@@ -95,7 +126,13 @@ public class GameboardScreen extends ScreenAdapter {
 
 	@Override
 	public void dispose() {
-
 		this.gameboard.dispose();
+	}
+
+	@Override
+	public void notifyObserver(Event event) {
+
+		this.readEventMessage(event.getEvent());
+
 	}
 }

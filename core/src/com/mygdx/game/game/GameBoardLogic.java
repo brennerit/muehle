@@ -7,6 +7,9 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
+import com.mygdx.game.observer.Event;
+import com.mygdx.game.observer.Observer;
+import com.mygdx.game.observer.Subjekt;
 import com.mygdx.game.player.Human;
 import com.mygdx.game.player.Player;
 
@@ -16,14 +19,13 @@ import com.mygdx.game.player.Player;
  * @author ahmed
  *
  */
-public class GameBoardLogic {
-
-
+public class GameBoardLogic extends Subjekt{
 
 	private List<GameBoardPoint> gbpList;
 	private Rule rule;
 	private final int MAX_GAMEBOARDPOINT = 24;
 
+	
 	public GameBoardLogic() {
 
 		this.gbpList = new ArrayList<GameBoardPoint>();

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
+import com.mygdx.game.observer.Subjekt;
 
 /**
  * Diese Klasse Repr�sentiert das Spielfeld. Das Spielfeld besteht aus
@@ -18,13 +19,11 @@ import com.mygdx.game.game.GameBoardPoint.StoneSide;
  * @author Ahmed
  *
  **/
-public class Gameboard {
+public class Gameboard extends Subjekt{
 
 	private Texture gamefieldTex;
 	private GameBoardLogic logic;
 	private List<GameBoardPointConnecter> connecterlist;
-
-
 
 	public Gameboard() {
 		this.gamefieldTex = new Texture("muehle_board.png");
@@ -92,5 +91,6 @@ public class Gameboard {
 	public void dispose() {
 
 	}
+	
 
 }
