@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.observer.Event;
 import com.mygdx.game.observer.Observer;
-import com.mygdx.game.observer.Subjekt;
+import com.mygdx.game.observer.Subject;
 import com.mygdx.game.player.Human;
 import com.mygdx.game.player.Player;
 
@@ -19,20 +19,17 @@ import com.mygdx.game.player.Player;
  * @author ahmed
  *
  */
-public class GameBoardLogic extends Subjekt{
+public class GameBoardLogic extends Subject {
 
 	private List<GameBoardPoint> gbpList;
-	private Rule rule;
-	private final int MAX_GAMEBOARDPOINT = 24;
-
+	
+	private final int MAX_GAMEBOARDPOINT = 24;	
 	
 	public GameBoardLogic() {
 
 		this.gbpList = new ArrayList<GameBoardPoint>();
 
 		this.initField();
-
-		this.rule = new Rule(this);
 
 		// this.printField();
 
@@ -201,17 +198,19 @@ public class GameBoardLogic extends Subjekt{
 	public void update() {
 
 	}
+	
+	/**
+	 * Diese methode gibt den Ausgang der Runde zurück, ob z.B. Spieler 1 seinen Zug gemacht hat oder
+	 * ob jemand gewonnen hat
+	 * 
+	 */
+	public Event.Event_Message resultMessage(){
+		//TODO
+		return null;
+	}
 
 	public List<GameBoardPoint> getgbpList() {
 		return this.gbpList;
-	}
-
-	public Rule getRule() {
-		return rule;
-	}
-
-	public void setRule(Rule rule) {
-		this.rule = rule;
 	}
 
 	public List<GameBoardPoint> getCopyList() {
@@ -222,6 +221,7 @@ public class GameBoardLogic extends Subjekt{
 		return copy;
 
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

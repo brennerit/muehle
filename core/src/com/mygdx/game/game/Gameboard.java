@@ -8,8 +8,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Main;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
-import com.mygdx.game.observer.Subjekt;
+import com.mygdx.game.observer.Event;
+import com.mygdx.game.observer.Subject;
 
 /**
  * Diese Klasse Repr�sentiert das Spielfeld. Das Spielfeld besteht aus
@@ -19,11 +21,12 @@ import com.mygdx.game.observer.Subjekt;
  * @author Ahmed
  *
  **/
-public class Gameboard extends Subjekt{
+public class Gameboard extends Subject{
 
 	private Texture gamefieldTex;
 	private GameBoardLogic logic;
 	private List<GameBoardPointConnecter> connecterlist;
+	private Rule rule;
 
 	public Gameboard() {
 		this.gamefieldTex = new Texture("muehle_board.png");
@@ -31,6 +34,8 @@ public class Gameboard extends Subjekt{
 
 		this.connecterlist = new ArrayList<GameBoardPointConnecter>();
 
+		this.rule = new Rule(logic);
+		
 		// Außen
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(0), 250, 380));
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(1), 440, 380));
@@ -60,6 +65,7 @@ public class Gameboard extends Subjekt{
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(21), 440, 140));
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(22), 370, 140));
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(23), 370, 200));
+		
 	}
 
 	/**
@@ -72,13 +78,21 @@ public class Gameboard extends Subjekt{
 	}
 
 	public void update() {
-
 		this.logic.update();
+		
 
 	}
 
 	public void render(SpriteBatch batch) {
 
+		
+		if(this.logic.resultMessage() != Event.Event_Message.NONE){
+			
+		}
+		
+		batch.draw(this.getGamefieldTexture(),
+				(Main.WINDOW_WIDTH / 2) - (this.getGamefieldTexture().getWidth() / 2), 0, 400, 400);
+		
 		Iterator<GameBoardPointConnecter> iter = this.connecterlist.iterator();
 
 		while (iter.hasNext()) {
@@ -87,10 +101,9 @@ public class Gameboard extends Subjekt{
 		}
 
 	}
-
+	
 	public void dispose() {
 
+		
 	}
-	
-
 }

@@ -25,6 +25,8 @@ public class GameBoardPointConnecter {
 
 	private GameBoardPoint gbp;
 
+	private Color color;
+
 	public GameBoardPointConnecter(GameBoardPoint gbp, int posX, int posY) {
 
 		this.gbp = gbp;
@@ -33,9 +35,9 @@ public class GameBoardPointConnecter {
 
 		Pixmap pix = new Pixmap(50, 50, Format.RGBA8888);
 
-		pix.setColor(1, 0, 0, 0.5f);
-
-		pix.fillCircle(25, 25, 25);
+		this.color = new Color(0,  0, 0f, 1f);
+	//	pix.setColor(this.color);
+		pix.drawCircle(25, 25, 25);
 
 		tex = (new Texture(pix));
 
@@ -43,14 +45,24 @@ public class GameBoardPointConnecter {
 
 	}
 
-	private Color color;
-
-	public void update(Color c) {
+	/**
+	 * Überprüft ob ein connector von der Maus berührt wird und färbt es entsprechend ein
+	 * @param c
+	 */
+	public void update() {
 		if (hitbox.contains(Gdx.input.getX(), Main.WINDOW_HEIGHT - Gdx.input.getY())) {
 
-			this.color = new Color(0, 0, 1, 1);
+			if (Gdx.input.isTouched()) {
+
+				this.color.set(0, 1, 0, 1);
+
+			} else {
+				this.color.set(0, 0, 0, 0f);
+
+			}
+
 		} else {
-			this.color = c;
+			this.color.set(0, 0, 0, 1);
 		}
 
 	}
@@ -60,18 +72,18 @@ public class GameBoardPointConnecter {
 	}
 
 	public void render(SpriteBatch batch) {
-		this.update(batch.getColor());
+		this.update();
 
 		float posX = (this.hitbox.x - this.tex.getWidth() / 2);
 		float posY = (this.hitbox.y - this.tex.getHeight() / 2);
 
-		Color ccc = batch.getColor();
+		Color tmp = batch.getColor();
 
 		batch.setColor(color);
 
 		batch.draw(this.tex, posX, posY);
 
-		batch.setColor(ccc);
+		batch.setColor(tmp);
 	}
 
 	public void dispose() {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
+import com.mygdx.game.DebugMode;
 import com.mygdx.game.Main;
 import com.mygdx.game.observer.Event;
 import com.mygdx.game.observer.Event.Event_Message;
@@ -38,7 +39,11 @@ public class GameboardScreen extends ScreenAdapter implements Observer {
 
 		this.setMode(mode);
 
+		this.message = "";
+		
 		this.gameboard = new Gameboard();
+
+		this.gameboard.registry(this);
 	}
 
 	public void setMode(Mode mode) {
@@ -66,12 +71,12 @@ public class GameboardScreen extends ScreenAdapter implements Observer {
 	 * Diese Methode schreibt die �berschrift, um welchen modus es sich handelt.
 	 */
 	private void printHeadline() {
-		String title = (this.getMode() == Mode.VS_PLAYER) ? "Player Vs Player" : "Player vs CPU";
-		this.game.getFont().draw(this.game.getBatch(), title, Main.WINDOW_WIDTH / 2 - 50, Main.WINDOW_HEIGHT - 50);
+		this.game.getFont().draw(this.game.getBatch(), message, Main.WINDOW_WIDTH / 2 - 50, Main.WINDOW_HEIGHT - 50);
 	}
 
 	public void setMessage(String message) {
 
+		this.message = message;
 	}
 
 	public void readEventMessage(Event_Message e) {
@@ -101,21 +106,18 @@ public class GameboardScreen extends ScreenAdapter implements Observer {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		InputHandler();
+		this.InputHandler();
 
 		this.gameboard.update();
 
+		//Draw
 		this.game.getBatch().begin();
-
-		this.game.getBatch().draw(this.gameboard.getGamefieldTexture(),
-				(Main.WINDOW_WIDTH / 2) - (this.gameboard.getGamefieldTexture().getWidth() / 2), 0, 400, 400);
-
-		// Test GIb mausposition an
-		this.game.getFont().draw(this.game.getBatch(), "PosX: " + Gdx.input.getX(), 10, 10);
-
-		int posY = Main.WINDOW_HEIGHT - Gdx.input.getY();
-		this.game.getFont().draw(this.game.getBatch(), "PosY: " + posY, 10, 30);
-		// Test Ende
+		
+		if(DebugMode.DEBUNG_ON){
+			this.game.getFont().draw(this.game.getBatch(), "PosX: " + Gdx.input.getX(), 10, 10);
+			int posY = Main.WINDOW_HEIGHT - Gdx.input.getY();
+			this.game.getFont().draw(this.game.getBatch(), "PosY: " + posY, 10, 30);
+		}
 
 		this.gameboard.render(this.game.getBatch());
 
@@ -126,13 +128,15 @@ public class GameboardScreen extends ScreenAdapter implements Observer {
 
 	@Override
 	public void dispose() {
+
 		this.gameboard.dispose();
+
 	}
 
 	@Override
-	public void notifyObserver(Event event) {
+	public void notifyObserver(Event.Event_Message event) {
 
-		this.readEventMessage(event.getEvent());
+		this.readEventMessage(event);
 
 	}
 }
