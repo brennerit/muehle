@@ -3,12 +3,14 @@ package com.mygdx.game.observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Subjekt {
+import com.mygdx.game.observer.Event.Event_Message;
+
+public abstract class Subject {
 
 	public List<Observer> list;
 	public Event event;
 
-	public Subjekt() {
+	public Subject() {
 
 		this.list = new ArrayList<>();
 
@@ -16,22 +18,11 @@ public abstract class Subjekt {
 
 	public void registry(Observer obj) {
 
-		boolean isdouble = false;
+		this.list.add(obj);
 
-		for (int element = 0; element < list.size(); element++) {
-
-			if (this.list.get(element).equals(obj)) {
-				isdouble = true;
-			}
-
-		}
-
-		if (!isdouble) {
-			this.list.add(obj);
-		}
 	}
 
-	public void notifyAllObserver(Event e) {
+	public void notifyAllObserver(Event.Event_Message e) {
 		for (int element = 0; element < list.size(); element++) {
 
 			list.get(element).notifyObserver(e);

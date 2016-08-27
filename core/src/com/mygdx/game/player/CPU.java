@@ -1,7 +1,7 @@
 package com.mygdx.game.player;
 
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
-import com.mygdx.game.game.GameboardScreen.PlayerId;
+import com.mygdx.game.game.GameBoardScreen.PlayerId;
 /**
  * KI die gegen einen Menschlichen Spieler antritt.
  * @author jonathan

@@ -32,20 +32,20 @@ public class Rule {
 	}
 
 	/**
-	 * Gibt das {@link Gameboard} zurueck.
+	 * Gibt das {@link GameBoard} zurueck.
 	 * 
-	 * @return Das {@link Gameboard} in seinem aktuellen Zustand.
+	 * @return Das {@link GameBoard} in seinem aktuellen Zustand.
 	 */
 	public GameBoardLogic getGameBoardLogic() {
 		return gameBoardLogic;
 	}
 
 	/**
-	 * Setzt ein neues {@link Gameboard} und die berechnet die Anzahl der
+	 * Setzt ein neues {@link GameBoard} und die berechnet die Anzahl der
 	 * Spielstein für jeden Spieler, die sich auf dem Spielbrett befinden.
 	 * 
 	 * @param gameboard
-	 *            Das neue {@link Gameboard}
+	 *            Das neue {@link GameBoard}
 	 */
 	public void setGameBoardLogic(GameBoardLogic gameboard) {
 		this.gameBoardLogic = gameboard;

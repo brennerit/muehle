@@ -20,7 +20,7 @@ import com.mygdx.game.startscreen.StartScreen.Mode;
  * @author Ahmed
  *
  */
-public class GameboardScreen extends ScreenAdapter implements Observer {
+public class GameBoardScreen extends ScreenAdapter implements Observer {
 
 	public enum PlayerId {
 		PLAYER1, PLAYER2;
@@ -30,18 +30,18 @@ public class GameboardScreen extends ScreenAdapter implements Observer {
 
 	private Mode mode;
 
-	private Gameboard gameboard;
+	private GameBoard gameboard;
 
 	private String message;
 
-	public GameboardScreen(Main game, Mode mode) {
+	public GameBoardScreen(Main game, Mode mode) {
 		this.game = game;
 
 		this.setMode(mode);
 
 		this.message = "";
 		
-		this.gameboard = new Gameboard();
+		this.gameboard = new GameBoard();
 
 		this.gameboard.registry(this);
 	}

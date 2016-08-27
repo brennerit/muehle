@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.game.GameboardScreen;
+import com.mygdx.game.game.GameBoardScreen;
 import com.mygdx.game.startscreen.StartScreen;
 import com.mygdx.game.startscreen.StartScreen.Mode;
 

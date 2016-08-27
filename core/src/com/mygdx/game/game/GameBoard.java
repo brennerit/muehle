@@ -21,14 +21,14 @@ import com.mygdx.game.observer.Subject;
  * @author Ahmed
  *
  **/
-public class Gameboard extends Subject{
+public class GameBoard extends Subject{
 
 	private Texture gamefieldTex;
 	private GameBoardLogic logic;
 	private List<GameBoardPointConnecter> connecterlist;
 	private Rule rule;
 
-	public Gameboard() {
+	public GameBoard() {
 		this.gamefieldTex = new Texture("muehle_board.png");
 		this.logic = new GameBoardLogic();
 

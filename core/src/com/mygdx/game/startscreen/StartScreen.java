@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Main;
-import com.mygdx.game.game.GameboardScreen;
+import com.mygdx.game.game.GameBoardScreen;
 import com.mygdx.game.icons.Cursor;
 
 public class StartScreen extends ScreenAdapter {
@@ -46,8 +46,8 @@ public class StartScreen extends ScreenAdapter {
 	}
 
 	/**
-	 * Hier wird das Menü gezeichnet. Wichtig: Diese Methode muss innerhalb von
-	 * batch.begin() und batch.end() ausgeführt werden
+	 * Hier wird das Menï¿½ gezeichnet. Wichtig: Diese Methode muss innerhalb von
+	 * batch.begin() und batch.end() ausgefï¿½hrt werden
 	 */
 	private void drawMenu() {
 		
@@ -63,10 +63,10 @@ public class StartScreen extends ScreenAdapter {
 	}
 
 	/**
-	 * Der Spieler kann entweder ENTER drücken, um einen Punkt auszuwählen oder
+	 * Der Spieler kann entweder ENTER drï¿½cken, um einen Punkt auszuwï¿½hlen oder
 	 * aber mit den Pfeiltasten oben und unten den Cursor bewegen. Die Stelle
 	 * des Cursors wird anhand der Variable menuPointNumber festgelegt. Damit
-	 * weiß die Klasse an welcher stelle im menü sich der Cursor befindet.
+	 * weiï¿½ die Klasse an welcher stelle im menï¿½ sich der Cursor befindet.
 	 */
 	private void InputHandler() {
 
@@ -132,15 +132,15 @@ public class StartScreen extends ScreenAdapter {
 	}
 
 	/**
-	 * Falls der Spieler ENTER drückt, wird diese Methode aufgerufen.
+	 * Falls der Spieler ENTER drï¿½ckt, wird diese Methode aufgerufen.
 	 */
 	private void executeEnter() {
 		switch (this.mode) {
 		case VS_CPU:
-			this.game.setScreen(new GameboardScreen(this.game, Mode.VS_CPU));
+			this.game.setScreen(new GameBoardScreen(this.game, Mode.VS_CPU));
 			break;
 		case VS_PLAYER:
-			this.game.setScreen(new GameboardScreen(this.game, Mode.VS_PLAYER));
+			this.game.setScreen(new GameBoardScreen(this.game, Mode.VS_PLAYER));
 			break;
 		case END:
 			this.dispose();
