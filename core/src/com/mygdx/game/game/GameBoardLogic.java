@@ -195,8 +195,11 @@ public class GameBoardLogic extends Subject {
 	 */
 	public boolean executeHuman(final int roundnumber, GameBoardPoint gbp) {
 
-		if (roundnumber < 18) {
-			notifyAllObserver(Event_Message.PLAYER_SET_STONE);
+		boolean turn_ok = true;
+
+		Rule rule = new Rule(this);
+
+		if (roundnumber < 18 && rule.setStone(gbp)) {
 
 			if (roundnumber % 2 == 0) {
 				gbp.setSide(StoneSide.PLAYER1);
@@ -206,21 +209,25 @@ public class GameBoardLogic extends Subject {
 
 			}
 
+		} else if (roundnumber >= 18) {
+
 		} else {
-			notifyAllObserver(Event_Message.PLAYER_MOVE);
+			turn_ok = false;
 		}
 
+		// Beendet die Runde und ermittelt wer als nächstes dran is
+		if (turn_ok) {
 
-		if (roundnumber % 2 == 0) {
-			notifyAllObserver(Event_Message.PLAYER2_TURN);
-			
-		}else{
-			notifyAllObserver(Event_Message.PLAYER1_TURN);
-			
+			if (roundnumber % 2 == 0) {
+				notifyAllObserver(Event_Message.PLAYER2_TURN);
+
+			} else {
+				notifyAllObserver(Event_Message.PLAYER1_TURN);
+
+			}
+
 		}
-
-
-		return true;
+		return turn_ok;
 	}
 
 	/**
@@ -231,6 +238,7 @@ public class GameBoardLogic extends Subject {
 
 		Rule r = new Rule(this);
 
+		// Beispiel KI mit zufall
 		if (roundnumber < 18) {
 
 			boolean tmp = true;
