@@ -2,19 +2,15 @@ package com.mygdx.game.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Collection;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
-import com.mygdx.game.observer.Event;
-import com.mygdx.game.observer.Observer;
+import com.mygdx.game.observer.Event.Event_Message;
 import com.mygdx.game.observer.Subject;
-import com.mygdx.game.player.Human;
 import com.mygdx.game.player.Player;
 
 /**
- * Die Logik vom Spielfeld
+ * Die Logik vom Spielfeld.
  * 
  * @author ahmed
  *
@@ -22,18 +18,14 @@ import com.mygdx.game.player.Player;
 public class GameBoardLogic extends Subject {
 
 	private List<GameBoardPoint> gbpList;
-	
-	private final int MAX_GAMEBOARDPOINT = 24;	
-	
+
+	private final int MAX_GAMEBOARDPOINT = 24;
+
 	public GameBoardLogic() {
 
 		this.gbpList = new ArrayList<GameBoardPoint>();
 
 		this.initField();
-
-		// this.printField();
-
-		// this.connecter = new GameboardPointConnecter(0, 0);
 	}
 
 	/**
@@ -149,7 +141,6 @@ public class GameBoardLogic extends Subject {
 		}
 
 		return tmp;
-
 	}
 
 	/**
@@ -195,18 +186,79 @@ public class GameBoardLogic extends Subject {
 
 	}
 
-	public void update() {
+	/**
+	 * 
+	 * @param roundnumber
+	 * @param gbp
+	 * @return Ob es ein Gültiger zug ist wird ermittelt. Wenn nicht Gültig,
+	 *         wird false geliefert
+	 */
+	public boolean executeHuman(final int roundnumber, GameBoardPoint gbp) {
+
+		if (roundnumber < 18) {
+			notifyAllObserver(Event_Message.PLAYER_SET_STONE);
+
+			if (roundnumber % 2 == 0) {
+				gbp.setSide(StoneSide.PLAYER1);
+
+			} else {
+				gbp.setSide(StoneSide.PLAYER2);
+
+			}
+
+		} else {
+			notifyAllObserver(Event_Message.PLAYER_MOVE);
+		}
+
+
+		if (roundnumber % 2 == 0) {
+			notifyAllObserver(Event_Message.PLAYER2_TURN);
+			
+		}else{
+			notifyAllObserver(Event_Message.PLAYER1_TURN);
+			
+		}
+
+
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param roundnumber
+	 */
+	public void executeCPU(final int roundnumber) {
+
+		Rule r = new Rule(this);
+
+		if (roundnumber < 18) {
+
+			boolean tmp = true;
+			while (tmp) {
+
+				GameBoardPoint gg = this.gbpList.get((int) (Math.random() * 100 % 24));
+				while (r.setStone(gg)) {
+					tmp = false;
+					gg.setSide(StoneSide.PLAYER2);
+				}
+
+			}
+
+		}
+		notifyAllObserver(Event_Message.PLAYER1_TURN);
 
 	}
-	
+
 	/**
-	 * Diese methode gibt den Ausgang der Runde zurück, ob z.B. Spieler 1 seinen Zug gemacht hat oder
-	 * ob jemand gewonnen hat
+	 * Falls ein GameboardPoint Berührt wird, wird es hier übergeben
 	 * 
+	 * @param gbp
 	 */
-	public Event.Event_Message resultMessage(){
-		//TODO
-		return null;
+	public List<GameBoardPoint> getPossibleGameboardPosition(GameBoardPoint gbp) {
+
+		Rule r = new Rule(this);
+		return r.getPossibleStonePositions(gbp);
+
 	}
 
 	public List<GameBoardPoint> getgbpList() {

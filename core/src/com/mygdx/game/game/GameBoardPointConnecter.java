@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.mygdx.game.Main;
+import com.mygdx.game.game.GameBoardPoint.StoneSide;
 
 /**
  * Diese Klasse repr�sentiert die Schnittstelle zwischen den Menschen und den
@@ -25,7 +26,8 @@ public class GameBoardPointConnecter {
 
 	private GameBoardPoint gbp;
 
-	private Color color;
+	private boolean istouched;
+	private StoneSide side;
 
 	public GameBoardPointConnecter(GameBoardPoint gbp, int posX, int posY) {
 
@@ -33,38 +35,67 @@ public class GameBoardPointConnecter {
 
 		this.hitbox = new Circle(posX, posY, 25);
 
-		Pixmap pix = new Pixmap(50, 50, Format.RGBA8888);
+		chanceStonesideTex(StoneSide.WITHOUT_PLAYER);
+		this.side = StoneSide.WITHOUT_PLAYER;
 
-		this.color = new Color(0,  0, 0f, 1f);
-	//	pix.setColor(this.color);
-		pix.drawCircle(25, 25, 25);
+	}
 
-		tex = (new Texture(pix));
+	public GameBoardPoint getGameBoardPoint() {
+		return gbp;
+	}
 
-		pix.dispose();
+	public void setGameBoardPoint(GameBoardPoint gbp) {
+		this.gbp = gbp;
+	}
+
+	public void chanceStonesideTex(StoneSide s) {
+
+		if (s == StoneSide.PLAYER1) {
+			this.tex = new Texture("Stone_Player1.bmp");
+
+		}
+		if (s == StoneSide.PLAYER2) {
+
+			this.tex = new Texture("Stone_Player2.bmp");
+		}
+		if (s == StoneSide.WITHOUT_PLAYER) {
+
+			this.tex = new Texture("Stone_Without.bmp");
+		}
 
 	}
 
 	/**
-	 * Überprüft ob ein connector von der Maus berührt wird und färbt es entsprechend ein
+	 * Sagt aus, ob es von der Maus berührt wurde
+	 * 
+	 * @return
+	 */
+	public boolean isTouched() {
+		return this.istouched;
+	}
+
+	/**
+	 * Überprüft ob ein connector von der Maus berührt wird und färbt es
+	 * entsprechend ein
+	 * 
 	 * @param c
 	 */
 	public void update() {
 		if (hitbox.contains(Gdx.input.getX(), Main.WINDOW_HEIGHT - Gdx.input.getY())) {
 
-			if (Gdx.input.isTouched()) {
+			if (Gdx.input.justTouched()) {
 
-				this.color.set(0, 1, 0, 1);
+				this.istouched = true;
 
-			} else {
-				this.color.set(0, 0, 0, 0f);
+			}else{
+				this.istouched = false;
 
 			}
-
-		} else {
-			this.color.set(0, 0, 0, 1);
 		}
 
+		if(this.side != this.getGameBoardPoint().getSide()){
+			this.chanceStonesideTex(this.getGameBoardPoint().getSide());
+		}
 	}
 
 	public Texture getTexture() {
@@ -77,13 +108,8 @@ public class GameBoardPointConnecter {
 		float posX = (this.hitbox.x - this.tex.getWidth() / 2);
 		float posY = (this.hitbox.y - this.tex.getHeight() / 2);
 
-		Color tmp = batch.getColor();
-
-		batch.setColor(color);
-
 		batch.draw(this.tex, posX, posY);
 
-		batch.setColor(tmp);
 	}
 
 	public void dispose() {

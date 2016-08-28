@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,7 +12,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Main;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.observer.Event;
+import com.mygdx.game.observer.Event.Event_Message;
 import com.mygdx.game.observer.Subject;
+import com.mygdx.game.player.CPU;
+import com.mygdx.game.player.Human;
+import com.mygdx.game.player.Player;
 
 /**
  * Diese Klasse Repr�sentiert das Spielfeld. Das Spielfeld besteht aus
@@ -21,21 +26,26 @@ import com.mygdx.game.observer.Subject;
  * @author Ahmed
  *
  **/
-public class GameBoard extends Subject{
+public class GameBoard {
 
 	private Texture gamefieldTex;
 	private GameBoardLogic logic;
 	private List<GameBoardPointConnecter> connecterlist;
 	private Rule rule;
+	private int roundNumber;
+	private Player currentPlayer;
 
 	public GameBoard() {
 		this.gamefieldTex = new Texture("muehle_board.png");
+
 		this.logic = new GameBoardLogic();
+
+		this.currentPlayer = new Human(StoneSide.PLAYER1);
 
 		this.connecterlist = new ArrayList<GameBoardPointConnecter>();
 
 		this.rule = new Rule(logic);
-		
+
 		// Außen
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(0), 250, 380));
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(1), 440, 380));
@@ -65,7 +75,11 @@ public class GameBoard extends Subject{
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(21), 440, 140));
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(22), 370, 140));
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(23), 370, 200));
-		
+
+	}
+
+	public void setPlayer(Player pl) {
+		this.currentPlayer = pl;
 	}
 
 	/**
@@ -77,33 +91,47 @@ public class GameBoard extends Subject{
 		return this.gamefieldTex;
 	}
 
-	public void update() {
-		this.logic.update();
-		
-
+	public GameBoardLogic getGameLogic() {
+		return this.logic;
 	}
+
+	private GameBoardPoint gbp;
 
 	public void render(SpriteBatch batch) {
 
+		if (roundNumber < 18) {
+			this.logic.notifyAllObserver(Event_Message.PLAYER_SET_STONE);
 		
-		if(this.logic.resultMessage() != Event.Event_Message.NONE){
 			
+		} else {
+			this.logic.notifyAllObserver(Event_Message.PLAYER_MOVE);
 		}
-		
-		batch.draw(this.getGamefieldTexture(),
-				(Main.WINDOW_WIDTH / 2) - (this.getGamefieldTexture().getWidth() / 2), 0, 400, 400);
-		
+		// Zeichnet das Spielfeld
+		batch.draw(this.getGamefieldTexture(), (Main.WINDOW_WIDTH / 2) - (this.getGamefieldTexture().getWidth() / 2), 0,
+				400, 400);
+
 		Iterator<GameBoardPointConnecter> iter = this.connecterlist.iterator();
 
-		while (iter.hasNext()) {
-			GameBoardPointConnecter gc = iter.next();
-			gc.render(batch);
-		}
+		if (this.currentPlayer instanceof CPU) {
+			this.logic.executeCPU(this.roundNumber++);
 
+		}else{
+			while (iter.hasNext()) {
+				GameBoardPointConnecter gc = iter.next();
+				gc.render(batch);
+				if (this.currentPlayer instanceof Human && gc.isTouched()) {
+					
+					if(this.logic.executeHuman(this.roundNumber, gc.getGameBoardPoint())){
+						this.roundNumber++;
+					}
+					
+				}
+			}
+				
+		}
 	}
-	
+
 	public void dispose() {
 
-		
 	}
 }
