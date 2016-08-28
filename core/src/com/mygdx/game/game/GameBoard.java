@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.DebugMode;
 import com.mygdx.game.Main;
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.observer.Event;
 import com.mygdx.game.observer.Event.Event_Message;
+import com.mygdx.game.observer.Observer;
 import com.mygdx.game.observer.Subject;
 import com.mygdx.game.player.CPU;
 import com.mygdx.game.player.Human;
@@ -26,7 +28,7 @@ import com.mygdx.game.player.Player;
  * @author Ahmed
  *
  **/
-public class GameBoard {
+public class GameBoard implements Observer {
 
 	private Texture gamefieldTex;
 	private GameBoardLogic logic;
@@ -34,6 +36,7 @@ public class GameBoard {
 	private Rule rule;
 	private int roundNumber;
 	private Player currentPlayer;
+	private Event_Message status;
 
 	public GameBoard() {
 		this.gamefieldTex = new Texture("muehle_board.png");
@@ -44,7 +47,7 @@ public class GameBoard {
 
 		this.connecterlist = new ArrayList<GameBoardPointConnecter>();
 
-		this.rule = new Rule(logic);
+		this.logic.registry(this);
 
 		// Außen
 		connecterlist.add(new GameBoardPointConnecter(logic.getgbpList().get(0), 250, 380));
@@ -82,6 +85,10 @@ public class GameBoard {
 		this.currentPlayer = pl;
 	}
 
+	public int getRoundNumber() {
+		return this.roundNumber;
+	}
+
 	/**
 	 * Mit dieser Methode erh�lt man die Texture vom Spielfeld
 	 * 
@@ -95,17 +102,10 @@ public class GameBoard {
 		return this.logic;
 	}
 
-	private GameBoardPoint gbp;
+	private GameBoardPoint tmpStone;
 
 	public void render(SpriteBatch batch) {
 
-		if (roundNumber < 18) {
-			this.logic.notifyAllObserver(Event_Message.PLAYER_SET_STONE);
-		
-			
-		} else {
-			this.logic.notifyAllObserver(Event_Message.PLAYER_MOVE);
-		}
 		// Zeichnet das Spielfeld
 		batch.draw(this.getGamefieldTexture(), (Main.WINDOW_WIDTH / 2) - (this.getGamefieldTexture().getWidth() / 2), 0,
 				400, 400);
@@ -115,23 +115,62 @@ public class GameBoard {
 		if (this.currentPlayer instanceof CPU) {
 			this.logic.executeCPU(this.roundNumber++);
 
-		}else{
+		} else {
 			while (iter.hasNext()) {
 				GameBoardPointConnecter gc = iter.next();
+
 				gc.render(batch);
 				if (this.currentPlayer instanceof Human && gc.isTouched()) {
 					
-					if(this.logic.executeHuman(this.roundNumber, gc.getGameBoardPoint())){
-						this.roundNumber++;
-					}
+					tmpStone = gc.getGameBoardPoint();
 					
+					if (this.status == Event_Message.PLAYER_CAN_DELETE
+							&& this.logic.DeleteStone(gc.getGameBoardPoint(), this.roundNumber)) {
+
+						System.out.println(1);
+						this.roundNumber++;
+
+					} else if (this.status == Event_Message.PLAYER_MOVE_STONE
+							&& logic.moveStone(gc.getGameBoardPoint(), tmpStone)) {
+
+						System.out.println(2);
+						this.roundNumber++;
+
+					} else if (this.checkStatus()
+							&& this.logic.executeHuman(this.roundNumber, gc.getGameBoardPoint())) {
+
+						System.out.println(3);
+						this.roundNumber++;
+
+					}
+
+					if (DebugMode.DEBUNG_ON) {
+						System.out.println(status);
+					}
 				}
+
 			}
-				
+
 		}
+		;
+	}// end method
+
+	public boolean checkStatus() {
+		if (this.status == Event_Message.PLAYER_CHOOSE_STONE || this.status == Event_Message.PLAYER_SET_STONE) {
+			return true;
+		}
+		return false;
 	}
 
 	public void dispose() {
+		this.gamefieldTex.dispose();
+	}
+
+	@Override
+	public void notifyObserver(Event_Message event) {
+		if (event != Event_Message.PLAYER1_TURN && event != Event_Message.PLAYER2_TURN) {
+			this.status = event;
+		}
 
 	}
 }

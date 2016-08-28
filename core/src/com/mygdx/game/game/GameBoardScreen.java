@@ -1,8 +1,10 @@
 package com.mygdx.game.game;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.DebugMode;
@@ -35,6 +37,8 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 	private String headlineMode;
 	private String message;
 	private String messageAction;
+	
+	private Music music;
 
 	private Player[] player;
 
@@ -42,11 +46,15 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 		this.game = game;
 
 		this.setMode(mode);
-
+		
+		this.music = Gdx.audio.newMusic(Gdx.files.internal("music\\battle_theme.mp3"));
+		this.music.setLooping(true);
+		this.music.play();
+		
 		if (getMode() == Mode.VS_PLAYER) {
-			this.headlineMode = "Spieler Vs Spieler";
+			this.headlineMode = "Spieler vs Spieler";
 		} else {
-			this.headlineMode = "Spieler Vs CPU";
+			this.headlineMode = "Spieler vs CPU";
 
 		}
 
@@ -64,8 +72,8 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 
 		}
 
-		this.readEventMessage(Event_Message.PLAYER1_TURN);
-		this.readEventMessage(Event_Message.PLAYER_SET_STONE);
+		this.gameboard.getGameLogic().notifyAllObserver(Event_Message.PLAYER1_TURN);
+		this.gameboard.getGameLogic().notifyAllObserver(Event_Message.PLAYER_SET_STONE);
 
 	}
 
@@ -80,6 +88,7 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 	private void InputHandler() {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			this.game.setScreen(new StartScreen(game));
+			this.dispose();
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.ALT_LEFT)) {
 
@@ -141,8 +150,11 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 		case PLAYER_CAN_DELETE:
 			this.messageAction = "Entferne einen Stein";
 			break;
-		case PLAYER_MOVE:
+		case PLAYER_MOVE_STONE:
 			this.messageAction = "Ziehe einen Stein";
+			break;
+		case PLAYER_CHOOSE_STONE:
+			this.messageAction = " Wähle einen Stein um Ziehen ";
 			break;
 		}
 
@@ -161,9 +173,11 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 		this.printHeadline();
 
 		if (DebugMode.DEBUNG_ON) {
-			this.game.getFont().draw(this.game.getBatch(), "PosX: " + Gdx.input.getX(), 10, 10);
+			this.game.getFont().draw(this.game.getBatch(), "PosX: " + Gdx.input.getX(), 10, 20);
 			int posY = Main.WINDOW_HEIGHT - Gdx.input.getY();
-			this.game.getFont().draw(this.game.getBatch(), "PosY: " + posY, 10, 30);
+			this.game.getFont().draw(this.game.getBatch(), "PosY: " + posY, 10, 50);
+			this.game.getFont().draw(this.game.getBatch(), "Runde: " + gameboard.getRoundNumber(), 10, 80);
+
 		}
 
 		this.gameboard.render(this.game.getBatch());
@@ -177,6 +191,8 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 	public void dispose() {
 
 		this.gameboard.dispose();
+		this.music.stop();
+		this.music.dispose();
 
 	}
 

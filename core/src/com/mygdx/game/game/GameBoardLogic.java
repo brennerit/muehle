@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.mygdx.game.game.GameBoardPoint.StoneSide;
 import com.mygdx.game.observer.Event.Event_Message;
+import com.mygdx.game.observer.Observer;
 import com.mygdx.game.observer.Subject;
-import com.mygdx.game.player.Player;
 
 /**
  * Die Logik vom Spielfeld.
@@ -15,17 +15,21 @@ import com.mygdx.game.player.Player;
  * @author ahmed
  *
  */
-public class GameBoardLogic extends Subject {
+public class GameBoardLogic extends Subject implements Observer {
 
 	private List<GameBoardPoint> gbpList;
 
 	private final int MAX_GAMEBOARDPOINT = 24;
+
+	private Event_Message action;
 
 	public GameBoardLogic() {
 
 		this.gbpList = new ArrayList<GameBoardPoint>();
 
 		this.initField();
+
+		this.registry(this);
 	}
 
 	/**
@@ -155,7 +159,6 @@ public class GameBoardLogic extends Subject {
 		try {
 			if (gbp.getNumber() != 8 && gbp.getNumber() != 16) {
 				GameBoardPoint tmp = this.gbpList.get(gbp.getNumber() - 1);
-
 				tmp.setHighter(gbp);
 				return tmp;
 			}
@@ -195,11 +198,12 @@ public class GameBoardLogic extends Subject {
 	 */
 	public boolean executeHuman(final int roundnumber, GameBoardPoint gbp) {
 
-		boolean turn_ok = true;
+		boolean turn_next = true;
 
+		this.calcHeadline(roundnumber);
 		Rule rule = new Rule(this);
 
-		if (roundnumber < 18 && rule.setStone(gbp)) {
+		if (action == Event_Message.PLAYER_SET_STONE && roundnumber < 18 && rule.setStone(gbp)) {
 
 			if (roundnumber % 2 == 0) {
 				gbp.setSide(StoneSide.PLAYER1);
@@ -208,15 +212,21 @@ public class GameBoardLogic extends Subject {
 				gbp.setSide(StoneSide.PLAYER2);
 
 			}
+			if (!rule.isMill(gbp).isEmpty()) {
+				notifyAllObserver(Event_Message.PLAYER_CAN_DELETE);
+				turn_next = false;
+			}
 
-		} else if (roundnumber >= 18) {
+		} else if (this.action == Event_Message.PLAYER_CHOOSE_STONE && roundnumber >= 18) {
+
+			// TODO
 
 		} else {
-			turn_ok = false;
+			turn_next = false;
 		}
 
 		// Beendet die Runde und ermittelt wer als nächstes dran is
-		if (turn_ok) {
+		if (turn_next) {
 
 			if (roundnumber % 2 == 0) {
 				notifyAllObserver(Event_Message.PLAYER2_TURN);
@@ -227,7 +237,60 @@ public class GameBoardLogic extends Subject {
 			}
 
 		}
+		return turn_next;
+	}
+
+	/**
+	 * Bewegt einen Stein
+	 * 
+	 * @param des
+	 * @param source
+	 */
+	public boolean moveStone(GameBoardPoint des, GameBoardPoint source) {
+
+		des.setSide(source.getSide());
+		source.setSide(StoneSide.WITHOUT_PLAYER);
+		return false;
+	}
+
+	public boolean DeleteStone(GameBoardPoint gbp, int roundNumber) {
+
+		boolean turn_ok = false;
+		Rule rule = new Rule(this);
+
+		if (rule.deleteStone(gbp)) {
+
+			gbp.setSide(StoneSide.WITHOUT_PLAYER);
+			turn_ok = true;
+
+			if (roundNumber < 18) {
+				this.notifyAllObserver(Event_Message.PLAYER_SET_STONE);
+
+			} else {
+				this.notifyAllObserver(Event_Message.PLAYER_MOVE_STONE);
+
+			}
+			if (roundNumber % 2 == 0) {
+				notifyAllObserver(Event_Message.PLAYER2_TURN);
+
+			} else {
+				notifyAllObserver(Event_Message.PLAYER1_TURN);
+
+			}
+
+		}
+
 		return turn_ok;
+	}
+
+	private void calcHeadline(int roundNumber) {
+
+		if (roundNumber < 18) {
+			this.notifyAllObserver(Event_Message.PLAYER_SET_STONE);
+
+		} else {
+			this.notifyAllObserver(Event_Message.PLAYER_CHOOSE_STONE);
+		}
 	}
 
 	/**
@@ -236,6 +299,7 @@ public class GameBoardLogic extends Subject {
 	 */
 	public void executeCPU(final int roundnumber) {
 
+		calcHeadline(roundnumber);
 		Rule r = new Rule(this);
 
 		// Beispiel KI mit zufall
@@ -257,15 +321,11 @@ public class GameBoardLogic extends Subject {
 
 	}
 
-	/**
-	 * Falls ein GameboardPoint Berührt wird, wird es hier übergeben
-	 * 
-	 * @param gbp
-	 */
-	public List<GameBoardPoint> getPossibleGameboardPosition(GameBoardPoint gbp) {
-
-		Rule r = new Rule(this);
-		return r.getPossibleStonePositions(gbp);
+	@Override
+	public void notifyObserver(Event_Message event) {
+		if (event != Event_Message.PLAYER1_TURN && event != Event_Message.PLAYER2_TURN) {
+			this.action = event;
+		}
 
 	}
 

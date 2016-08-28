@@ -95,6 +95,7 @@ public class GameBoardPointConnecter {
 
 		if(this.side != this.getGameBoardPoint().getSide()){
 			this.chanceStonesideTex(this.getGameBoardPoint().getSide());
+			this.side = this.getGameBoardPoint().getSide();
 		}
 	}
 
