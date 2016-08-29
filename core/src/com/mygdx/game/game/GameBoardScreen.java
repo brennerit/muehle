@@ -1,10 +1,7 @@
 package com.mygdx.game.game;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.DebugMode;
@@ -38,8 +35,6 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 	private String message;
 	private String messageAction;
 	
-	private Music music;
-
 	private Player[] player;
 
 	public GameBoardScreen(Main game, Mode mode) {
@@ -47,9 +42,6 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 
 		this.setMode(mode);
 		
-		this.music = Gdx.audio.newMusic(Gdx.files.internal("music\\battle_theme.mp3"));
-		this.music.setLooping(true);
-		this.music.play();
 		
 		if (getMode() == Mode.VS_PLAYER) {
 			this.headlineMode = "Spieler vs Spieler";
@@ -191,8 +183,6 @@ public class GameBoardScreen extends ScreenAdapter implements Observer {
 	public void dispose() {
 
 		this.gameboard.dispose();
-		this.music.stop();
-		this.music.dispose();
 
 	}
 
