@@ -218,8 +218,9 @@ public class GameBoardLogic extends Subject implements Observer {
 			}
 
 		} else if (this.action == Event_Message.PLAYER_CHOOSE_STONE && roundnumber >= 18) {
-
-			// TODO
+			
+			notifyAllObserver(Event_Message.PLAYER_MOVE_STONE);
+			turn_next = false;
 
 		} else {
 			turn_next = false;
@@ -264,16 +265,20 @@ public class GameBoardLogic extends Subject implements Observer {
 			turn_ok = true;
 
 			if (roundNumber < 18) {
+
 				this.notifyAllObserver(Event_Message.PLAYER_SET_STONE);
 
 			} else {
+
 				this.notifyAllObserver(Event_Message.PLAYER_MOVE_STONE);
 
 			}
 			if (roundNumber % 2 == 0) {
+
 				notifyAllObserver(Event_Message.PLAYER2_TURN);
 
 			} else {
+
 				notifyAllObserver(Event_Message.PLAYER1_TURN);
 
 			}

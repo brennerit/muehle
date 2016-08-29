@@ -122,27 +122,24 @@ public class GameBoard implements Observer {
 				gc.render(batch);
 				if (this.currentPlayer instanceof Human && gc.isTouched()) {
 					
-					tmpStone = gc.getGameBoardPoint();
 					
 					if (this.status == Event_Message.PLAYER_CAN_DELETE
 							&& this.logic.DeleteStone(gc.getGameBoardPoint(), this.roundNumber)) {
-
-						System.out.println(1);
 						this.roundNumber++;
 
 					} else if (this.status == Event_Message.PLAYER_MOVE_STONE
 							&& logic.moveStone(gc.getGameBoardPoint(), tmpStone)) {
-
-						System.out.println(2);
+						
+						
+						
 						this.roundNumber++;
 
 					} else if (this.checkStatus()
 							&& this.logic.executeHuman(this.roundNumber, gc.getGameBoardPoint())) {
-
-						System.out.println(3);
 						this.roundNumber++;
 
 					}
+				
 
 					if (DebugMode.DEBUNG_ON) {
 						System.out.println(status);
